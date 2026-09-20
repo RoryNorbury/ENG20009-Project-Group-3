@@ -27,15 +27,17 @@ void send_data(int addr, int dIndex) {
   }
 }
 
-void setup() {
-  Serial.begin(9600);
-}
+// Commented out so it doesn't mess with the main setup and loop functions - RORY
 
-//loop was to test it
-void loop() {
-  if (Serial.available()) {
-    String cmd = Serial.readStringUntil('\n');
-    cmd.trim();
-    Serial.println(interpret_command(cmd));
-  }
-}
+// void setup() {
+//   Serial.begin(9600);
+// }
+
+// //loop was to test it
+// void loop() {
+//   if (Serial.available()) {
+//     String cmd = Serial.readStringUntil('\n');
+//     cmd.trim();
+//     Serial.println(interpret_command(cmd));
+//   }
+// }
