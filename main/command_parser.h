@@ -12,6 +12,7 @@
 // or you can name it what you want and change the line
 
 #include "send_data.h"
+#include "start_measurement.h"
 
 // enums for interpret_command
 enum Command_List {
@@ -68,7 +69,7 @@ String interpret_command(String Command){
     case START_MEASUREMENT_L:
       // Start Measurement Function goes here ------------------------------
       // Example:
-      // start_measurement(command_address);
+      start_measurement(command_address);
       Serial.print("Start Measurement At: ");
       Serial.println(command_address);
       return "1 - Start Measurement";
