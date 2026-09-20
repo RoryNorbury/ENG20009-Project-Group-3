@@ -11,6 +11,7 @@
 // you can use the provied funciton name and simply uncomment the line
 // or you can name it what you want and change the line
 
+#include "send_data.h"
 
 // enums for interpret_command
 enum Command_List {
@@ -75,7 +76,7 @@ String interpret_command(String Command){
     case SEND_DATA_L:
       // Send Data Function goes here -------------------------------
       // Example:
-      // send_data(command_address, command_value);
+      send_data(command_address, command_value);
       Serial.print("Send Data from: ");
       Serial.print(command_address);
       Serial.print(" Data Selected: ");
