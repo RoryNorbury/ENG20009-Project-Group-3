@@ -1,5 +1,5 @@
 // used by other files, so must be declared before
-int sdiAddress = '0';
+int sdiAddress = 0;
 bool dataReady = false;
 int NUM_VALUES = 5;
 double lastValues[5] = {
@@ -35,13 +35,14 @@ Adafruit_BME680 bme;
 #include "command_parser.h"
 #include "serial_monitor_input_for_testing.h"
 
+
 void setup() {
   // setup here
   Serial.begin(9600);
 
   // init IC2
   Wire.begin();
-
+  
   // light sensor initialisation
   lightSensor.begin();
 
@@ -57,6 +58,9 @@ void setup() {
   bme.setPressureOversampling(BME680_OS_4X);
   bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
   bme.setGasHeater(320, 150);  // 320*C for 150 ms
+
+  delay(1000);
+  Serial.println("Compliant Sensor Node");
 }
 
 void loop() {
