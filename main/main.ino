@@ -1,5 +1,5 @@
 // used by other files, so must be declared before
-int sdiAddress = '0';
+int sdiAddress = 0;
 bool dataReady = false;
 int NUM_VALUES = 5;
 float lastValues[5] = {

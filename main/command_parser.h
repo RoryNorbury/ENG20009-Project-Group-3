@@ -13,6 +13,7 @@
 
 #include "send_data.h"
 #include "start_measurement.h"
+#include "query_and_address.h"
 
 // enums for interpret_command
 enum Command_List {
@@ -39,13 +40,13 @@ String interpret_command(String Command){
   if ((Command[0] == ADDRESS_QUERY_L) && (Command.length() == 2)) {
     // Address Query Function goes here ----------------------------------
     // Example:
-    // address_query();
+    address_query();
     return "1 - Address Query";
   }
   int command_address = Command[0] - 48; // Gets Address from Command String
   int command_value = Command[2] - 48; // Gets Command Value from Command String
   // Checks if the Command Address is within range
-  if ((command_address < 0) || (command_address > 9)){
+  if (command_address != sdiAddress) {
     return "0 - Invalid Address";
   }
   // checks if the Command Value is within range if applicable 
@@ -59,9 +60,8 @@ String interpret_command(String Command){
     case CHANGE_ADDRESS_L:
       // Change Address Function goes here --------------------------------
       // Example:
-      // change_address(command_address, command_value);
+      change_address(command_value);
       Serial.print("Change Address ");
-      Serial.print(command_address);
       Serial.print(" To: ");
       Serial.println(command_value);
       return "1 - Change Address";
@@ -69,17 +69,16 @@ String interpret_command(String Command){
     case START_MEASUREMENT_L:
       // Start Measurement Function goes here ------------------------------
       // Example:
-      start_measurement(command_address);
-      Serial.print("Start Measurement At: ");
+      start_measurement();
+      Serial.print("Start Measurement");
       Serial.println(command_address);
       return "1 - Start Measurement";
       break;
     case SEND_DATA_L:
       // Send Data Function goes here -------------------------------
       // Example:
-      send_data(command_address, command_value);
-      Serial.print("Send Data from: ");
-      Serial.print(command_address);
+      send_data(command_value);
+      Serial.print("Send Data ");
       Serial.print(" Data Selected: ");
       Serial.println(command_value);
       return "1 - Send Data";
@@ -88,8 +87,6 @@ String interpret_command(String Command){
       // Send Identification Function goes here --------------------------
       // Example:
       // send_identification(command_address);
-      Serial.print("Send Identification from: ");
-      Serial.println(command_address);
       return "1 - Send Identification";
       break;
     default:

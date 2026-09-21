@@ -3,10 +3,10 @@
 #pragma once
 #include "sensors.h"
 
-void start_measurement(int sensorAddress)
+void start_measurement()
 {
   // prepare and print response message
-  String out = String(sensorAddress);
+  String out = String(sdiAddress);
   
   // Allow 5 seconds for the information to be retreived
   out += "005";
