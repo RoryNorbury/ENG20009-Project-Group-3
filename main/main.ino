@@ -19,7 +19,14 @@ float lastValues[5] = {
 void setup() {
   // setup here
   Serial.begin(9600);
-  initSensors();
+  if (initSensors())
+  {
+    Serial.println("Could not initialise sensors, exiting");
+    exit(1);
+  }
+
+  delay(1000);
+  Serial.println("Compliant sensor node");
 }
 
 void loop() {
