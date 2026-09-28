@@ -18,7 +18,11 @@ float lastValues[5] = {
 
 void setup() {
   // setup here
-  Serial.begin(9600);
+  Serial.begin(9600); //9600 for arduino to PC communication
+  Serial1.begin(1200, SERIAL_7E1); //1200 baud for SDI, 7 data bits and 1 error bit
+  pinMode(7, OUTPUT);   
+  digitalWrite(7, HIGH); //HIGH = READ. LOW = WRITE
+
   if (initSensors())
   {
     Serial.println("Could not initialise sensors, exiting");
@@ -33,6 +37,7 @@ void loop() {
   // main code here
   while (1) {
     String str = serial_test_input_string();
+    Serial.println(str);
     String ret = interpret_command(str);
     Serial.println(ret);
   }

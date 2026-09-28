@@ -13,9 +13,10 @@ String serial_test_input_string(){
   Serial.println("");
   Serial.println("Enter String: ");
   Serial.print("> ");
-  while (Serial.available() == 0) {} // waits for a value in the Serial monitor
+  while (Serial1.available() == 0) {} // waits for a value in the Serial monitor
   // Needs a gap here or it breaks lol
-  String string = Serial.readString(); // reads string from Serial Monitor
+  String string = Serial1.readString(); // reads string from Serial Monitor
+  string = string.substring(1); //removes weird square/junk character
   string.trim(); //removes trailing whitespace
   Serial.println(string); 
   return string;

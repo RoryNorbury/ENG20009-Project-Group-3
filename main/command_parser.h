@@ -14,6 +14,7 @@
 #include "send_data.h"
 #include "start_measurement.h"
 #include "query_and_address.h"
+#include "send_identification.h"
 
 // enums for interpret_command
 enum Command_List {
@@ -86,7 +87,7 @@ String interpret_command(String Command){
     case SEND_ID_L:
       // Send Identification Function goes here --------------------------
       // Example:
-      // send_identification(command_address);
+      send_identification(command_address);
       return "1 - Send Identification";
       break;
     default:
