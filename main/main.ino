@@ -1,6 +1,6 @@
 // used by other files, so must be declared before
 int sdiAddress = 0;
-bool dataReady = false;
+bool dataReady = true;
 int NUM_VALUES = 5;
 float lastValues[5] = {
   0,  // Temperature

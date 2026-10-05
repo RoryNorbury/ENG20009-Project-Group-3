@@ -12,8 +12,10 @@ void send_data(int dIndex) {
     String out = String(sdiAddress);
 
     for (int i = 0; i < NUM_VALUES; i++) {
-      if (lastValues[i] >= 0) out += "+";
-      out += String(lastValues[i], 1);
+      if (lastValues[i] >= 0){
+        out += "+"; 
+        out += String(lastValues[i], 1);
+      } 
     }
 
     Serial.print(out);
