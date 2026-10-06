@@ -1,3 +1,6 @@
+// Author: Joseph Cowell | Student ID: 104888857
+// LCD init and function
+
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
 #include <SPI.h>
