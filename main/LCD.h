@@ -1,0 +1,34 @@
+#include <Adafruit_GFX.h>    // Core graphics library
+#include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
+#include <SPI.h>
+
+//pins for LCD
+#define TFT_CS    10
+#define TFT_RST   6 
+#define TFT_DC    7 
+#define TFT_SCLK 13   
+#define TFT_MOSI 11
+
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST); //creates object tft with library
+
+void updateLCD(float* data)
+{
+  //clear screen, then display: temp, humidity, pressure, and gas resistance on LCD
+  tft.fillScreen(ST77XX_BLACK);
+  tft.setCursor(0, 0);
+  tft.print("Temperature: ");
+  tft.print(data[0]);
+  tft.println(" C");
+
+  tft.print("Humidity:    ");
+  tft.print(data[1]);
+  tft.println(" %");
+
+  tft.print("Pressure:    ");
+  tft.print(int(data[2]));
+  tft.println(" Pa");
+
+  tft.print("Gas Resis:   ");
+  tft.print(int(data[3]));
+  tft.println(" kOhms");
+}

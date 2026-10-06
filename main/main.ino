@@ -15,6 +15,7 @@ float lastValues[5] = {
 #include "command_parser.h"
 #include "serial_monitor_input_for_testing.h"
 #include "sensors.h"
+#include "LCD.h"
 
 void setup() {
   // setup here
@@ -31,6 +32,13 @@ void setup() {
 
   delay(1000);
   Serial.println("Compliant sensor node");
+
+  //LCD init:
+  tft.initR(INITR_BLACKTAB);
+  tft.setRotation(3);
+  tft.fillScreen(ST77XX_BLACK);
+  tft.setTextColor(ST77XX_WHITE);
+  tft.setTextSize(1);
 }
 
 void loop() {
@@ -40,5 +48,6 @@ void loop() {
     Serial.println(str);
     String ret = interpret_command(str);
     Serial.println(ret);
+    updateLCD(lastValues);
   }
 }
