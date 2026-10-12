@@ -10,6 +10,7 @@
 // requires a function for performing the commanded task
 // you can use the provied funciton name and simply uncomment the line
 // or you can name it what you want and change the line
+#pragma once
 
 #include "send_data.h"
 #include "start_measurement.h"

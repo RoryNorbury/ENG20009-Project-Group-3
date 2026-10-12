@@ -1,5 +1,6 @@
 //Author: Hannah James || Student ID: 105339013
 //SEND DATA FUNCTION
+#pragma once
 
 void send_data(int dIndex) {
   if (!dataReady) {
