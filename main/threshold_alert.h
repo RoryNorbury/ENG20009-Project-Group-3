@@ -30,15 +30,15 @@ uint8_t check_alert_thresholds(sensorData lastData)
     }
     if (lastData.light < sensor_thresholds::LIGHT)
     {
-        output &= sensor_alert_flags::LIGHT;
+        output |= sensor_alert_flags::LIGHT;
     }
     if (lastData.gas_resistance > sensor_thresholds::GAS)
     {
-        output &= sensor_alert_flags::GAS;
+        output |= sensor_alert_flags::GAS;
     }
     if (lastData.humidity > sensor_thresholds::HUMIDITY)
     {
-        output &= sensor_alert_flags::HUMIDITY;
+        output |= sensor_alert_flags::HUMIDITY;
     }
     return output;
 }
