@@ -22,6 +22,11 @@ BH1750 lightSensor;
 
 Adafruit_BME680 bme;
 
+namespace sensors
+{
+  bool inited = false;
+}
+
 struct sensorData
 {
   float temperature;    // in Celsius
@@ -62,6 +67,8 @@ bool initSensors()
   bme.setPressureOversampling(BME680_OS_4X);
   bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
   bme.setGasHeater(320, 150); // 320*C for 150 ms
+
+  sensors::inited = true;
   return 0;
 }
 
