@@ -88,8 +88,7 @@ String interpret_command(String Command){
     case SEND_ID_L:
       // Send Identification Function goes here --------------------------
       // Example:
-      send_identification(command_address);
-      return "1 - Send Identification";
+      return send_identification(command_address);
       break;
     default:
       return "0 - Invalid Command";

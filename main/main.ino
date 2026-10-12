@@ -23,6 +23,7 @@ float lastValues[2][4] = {
 #include "sensors.h"
 #include "LCD.h"
 #include "threshold_alert.h"
+#include "SDA.h"
 
 // variable declarations here
 int ledAlertPin = 11;
@@ -48,6 +49,7 @@ void setup() {
 
   //LCD init:
   tft.initR(INITR_BLACKTAB);
+  tft.setRotation(3);
 }
 
 void loop() {
@@ -57,6 +59,7 @@ void loop() {
     Serial.println(str);
     String ret = interpret_command(str);
     Serial.println(ret);
+    sendToSDI(ret);
 
     sensorData data;
     readSensors(&data);

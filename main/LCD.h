@@ -18,7 +18,6 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RS
 
 void updateLCD(float data[2][4])
 {
-  tft.setRotation(3);
   tft.fillScreen(ST77XX_BLACK);
   tft.setTextColor(ST77XX_WHITE);
   tft.setTextSize(1);
@@ -26,22 +25,22 @@ void updateLCD(float data[2][4])
   tft.fillScreen(ST77XX_BLACK);
   tft.setCursor(0, 0);
   tft.print("Temperature: ");
-  tft.print(data[0][0], 1);
+  tft.print(data[0][0], 1); // rounded to 1dp
   tft.println(" C");
 
   tft.print("Humidity:    ");
-  tft.print(data[0][1], 1);
+  tft.print(data[0][1], 1); // rounded to 1 dp
   tft.println(" %");
 
   tft.print("Pressure:    ");
-  tft.print(round((data[0][2])/1000)); //force to int as original float contains useless decimal (e.g. 12345.00)
-  tft.println(" KPa");
+  tft.print(round((data[0][2])/100)); // converted to HPa (standard unit)
+  tft.println(" HPa");
 
   tft.print("Gas Resis:   ");
-  tft.print(round((data[0][3])/1000)); //force to int as original float contains useless decimal
+  tft.print(round((data[0][3])/1000)); // converted to KOhms
   tft.println(" kOhms");
 
-  tft.print("Light level: ");
+  tft.print("Light Level: ");
   tft.print(round(data[1][0]));
   tft.println(" Lux");
 }

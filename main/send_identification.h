@@ -6,11 +6,11 @@ String SDI_v = "14"; //14 = v1.4
 String COURSE_CODE = "ENG20009";
 String STUDENT_ID = "104888857";  // 9 digits: mmmmmm (first 6) + vvv (last 3)
 
-void send_identification(int address) {
+String send_identification(int address) {
   String id = String(address);
   id += SDI_v;
   id += COURSE_CODE;
   id += STUDENT_ID;
   id += "\r\n";
-  Serial.print(id);
+  return id;
 }
