@@ -48,10 +48,6 @@ void setup() {
 
   //LCD init:
   tft.initR(INITR_BLACKTAB);
-  tft.setRotation(3);
-  tft.fillScreen(ST77XX_BLACK);
-  tft.setTextColor(ST77XX_WHITE);
-  tft.setTextSize(1);
 }
 
 void loop() {
