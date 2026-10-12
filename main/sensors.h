@@ -34,13 +34,13 @@ struct sensorData
   float pressure;       // in Pascals
   float gas_resistance; // in kilo Ohms
   float light;          // in LUX
-  void fillArray(float array[5])
+  void fillArray(float array[2][4])
   {
-    array[0] = temperature;
-    array[1] = humidity;
-    array[2] = pressure;
-    array[3] = gas_resistance;
-    array[4] = light;
+    array[0][0] = temperature;
+    array[0][1] = humidity;
+    array[0][2] = pressure;
+    array[0][3] = gas_resistance;
+    array[1][0] = light;
   }
 };
 

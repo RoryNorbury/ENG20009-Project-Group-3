@@ -8,13 +8,13 @@ void send_data(int dIndex) {
     return;
   }
 
-  if (dIndex == 0) {
+  if (dIndex <= 1) {
     String out = String(sdiAddress);
 
-    for (int i = 0; i < NUM_VALUES; i++) {
-      if (lastValues[i] >= 0){
+    for (int i = 0; i < sizeof(lastValues[dIndex]) / sizeof(lastValues[0][0]); i++) {
+      if (lastValues[dIndex][i] >= 0){
         out += "+"; 
-        out += String(lastValues[i], 1);
+        out += String(lastValues[dIndex][i], 1);
       } 
     }
 

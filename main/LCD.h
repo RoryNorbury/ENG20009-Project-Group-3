@@ -15,26 +15,30 @@
 
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST); //creates object called tft
 
-void updateLCD(float* data)
+void updateLCD(float data[2][4])
 {
   //clear screen, then display: temp, humidity, pressure, and gas resistance on LCD
   tft.fillScreen(ST77XX_BLACK);
   tft.setCursor(0, 0);
   tft.print("Temperature: ");
-  tft.print(data[0]);
+  tft.print(data[0][0]);
   tft.println(" C");
 
   tft.print("Humidity:    ");
-  tft.print(data[1]);
+  tft.print(data[0][1]);
   tft.println(" %");
 
   tft.print("Pressure:    ");
-  tft.print(int(data[2])); //force to int as original float contains useless decimal (e.g. 12345.00)
+  tft.print(int(data[0][2])); //force to int as original float contains useless decimal (e.g. 12345.00)
   tft.println(" Pa");
 
   tft.print("Gas Resis:   ");
-  tft.print(int(data[3])); //force to int as original float contains useless decimal
+  tft.print(int(data[0][3])); //force to int as original float contains useless decimal
   tft.println(" kOhms");
+
+  tft.print("Light level:   ");
+  tft.print(data[1][0]);
+  tft.println(" Lux");
 }
 
 void displayAlert(uint8_t alert_flag)
