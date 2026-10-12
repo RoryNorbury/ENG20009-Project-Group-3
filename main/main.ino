@@ -57,7 +57,7 @@ void loop() {
 
     sensorData data;
     readSensors(&data);
-    u_int8_t alerts = check_alert_thresholds(data);
+    uint8_t alerts = check_alert_thresholds(data);
     if (alerts > 0)
     {
       displayAlert(alerts);

@@ -30,18 +30,19 @@ void setup() {
 
   pinMode(directionPin, OUTPUT);
   digitalWrite(directionPin, HIGH); // UART board receive mode
-  Serial1.begin(1200, SERIAL_7E1);
+  //Serial.begin(1200, SERIAL_7E1);
 
   Serial.println();
   Serial.println("SDI-12 diagnostic ready");
-  Serial.println("Serial1: 1200 7E1, DIRO: HIGH");
+  Serial.println("Serial: 1200 7E1, DIRO: HIGH");
   scanI2C();
-  Serial.println("Listening for raw Serial1 bytes...");
+  Serial.println("Listening for raw Serial bytes...");
 }
 
 void loop() {
-  while (Serial1.available()) {
-    uint8_t value = static_cast<uint8_t>(Serial1.read());
+  //Serial.println("hellloooooo");
+  while (Serial.available()) {
+    uint8_t value = static_cast<uint8_t>(Serial.read());
 
     Serial.print("RX 0x");
     if (value < 16) {

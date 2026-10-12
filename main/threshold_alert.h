@@ -12,16 +12,16 @@ namespace sensor_thresholds
 }
 namespace sensor_alert_flags
 {
-    u_int8_t LIGHT = 1;
-    u_int8_t GAS = 2;
-    u_int8_t HUMIDITY = 4;
+    uint8_t LIGHT = 1;
+    uint8_t GAS = 2;
+    uint8_t HUMIDITY = 4;
 };
 // @brief check if any sensor readings violate their thresholds
 // @param lastData the last sensor readings
 // @return true if any sensor readings violate their thresholds, false otherwise
-u_int8_t check_alert_thresholds(sensorData lastData)
+uint8_t check_alert_thresholds(sensorData lastData)
 {
-    u_int8_t output = 0;
+    uint8_t output = 0;
     // TODO: implement exception if we implement handling them in a higher layer
     if (!sensors::inited)
     {

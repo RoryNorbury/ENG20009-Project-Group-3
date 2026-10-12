@@ -37,7 +37,7 @@ void updateLCD(float* data)
   tft.println(" kOhms");
 }
 
-void displayAlert(u_int8_t alert_flag)
+void displayAlert(uint8_t alert_flag)
 {
   // do nothing if no alerts
   if (alert_flag == 0)
