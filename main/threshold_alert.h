@@ -6,8 +6,8 @@
 
 namespace sensor_thresholds
 {
-    float LIGHT = 300;
-    float GAS = 10;// I have no idea what a normal gas reading is
+    float LIGHT = 1000;
+    float GAS = 200000;// I have no idea what a normal gas reading is
     float HUMIDITY = 70;
 }
 namespace sensor_alert_flags
@@ -18,7 +18,7 @@ namespace sensor_alert_flags
 };
 // @brief check if any sensor readings violate their thresholds
 // @param lastData the last sensor readings
-// @return true if any sensor readings violate their thresholds, false otherwise
+// @return a flag indicating if data is over a threshold. Uses sensor_alert_flags
 uint8_t check_alert_thresholds(sensorData lastData)
 {
     uint8_t output = 0;

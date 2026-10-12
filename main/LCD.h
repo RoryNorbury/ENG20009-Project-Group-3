@@ -51,7 +51,7 @@ void displayAlert(uint8_t alert_flag)
 
   // clear screen and set text colour to red
   tft.setTextColor(ST77XX_RED);
-  tft.setTextSize(4);
+  tft.setTextSize(1);
   tft.fillScreen(ST77XX_BLACK);
   tft.setCursor(0, 0);
 
