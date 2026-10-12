@@ -4,6 +4,7 @@
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
 #include <SPI.h> // Hardware SPI library
+#include "threshold_alert.h"
 
 //pins for LCD
 #define TFT_CS    10
@@ -34,4 +35,36 @@ void updateLCD(float* data)
   tft.print("Gas Resis:   ");
   tft.print(int(data[3])); //force to int as original float contains useless decimal
   tft.println(" kOhms");
+}
+
+void displayAlert(u_int8_t alert_flag)
+{
+  // do nothing if no alerts
+  if (alert_flag == 0)
+  {
+    return;
+  }
+
+  // clear screen and set text colour to red
+  tft.setTextColor(ST77XX_RED);
+  tft.setTextSize(4);
+  tft.fillScreen(ST77XX_BLACK);
+  tft.setCursor(0, 0);
+
+  tft.println("ALERT");
+  if (alert_flag & sensor_alert_flags::LIGHT)
+  {
+    tft.println("Light is below threshold!");
+  }
+  if (alert_flag & sensor_alert_flags::HUMIDITY)
+  {
+    tft.println("Humidity is above threshold!");
+  }
+  if (alert_flag & sensor_alert_flags::GAS)
+  {
+    tft.println("Gas is above threshold!");
+  }
+  // reset text colour and size back to what it was
+  tft.setTextColor(ST77XX_WHITE);
+  tft.setTextSize(1);
 }
