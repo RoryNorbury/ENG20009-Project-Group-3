@@ -1,5 +1,6 @@
 // Author: Joseph Cowell | Student ID: 104888857
 // Send Identification function
+#pragma once
 
 String SDI_v = "14"; //14 = v1.4
 String COURSE_CODE = "ENG20009";
