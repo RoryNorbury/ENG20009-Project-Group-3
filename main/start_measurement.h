@@ -10,6 +10,7 @@ void start_measurement()
   
   // Allow 5 seconds for the information to be retreived
   out += "005";
+  // indicates the amount of values in output data
   // adds NUM_VALUES to integer value of '0' ASCII character
   out += NUM_VALUES + '0';
 

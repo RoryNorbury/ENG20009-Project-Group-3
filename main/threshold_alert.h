@@ -6,8 +6,8 @@
 
 namespace sensor_thresholds
 {
-    float LIGHT = 1000;
-    float GAS = 200000;// I have no idea what a normal gas reading is
+    float LIGHT = 80;
+    float GAS = 300000;// I have no idea what a normal gas reading is
     float HUMIDITY = 70;
 }
 namespace sensor_alert_flags
