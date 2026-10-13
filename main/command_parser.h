@@ -62,7 +62,7 @@ String interpret_command(String Command){
     case CHANGE_ADDRESS_L:
       // Change Address Function goes here --------------------------------
       // Example:
-      change_address(command_value);
+      change_address(sdiAddress, command_value);
       Serial.print("Change Address ");
       Serial.print(" To: ");
       Serial.println(command_value);
@@ -79,11 +79,10 @@ String interpret_command(String Command){
     case SEND_DATA_L:
       // Send Data Function goes here -------------------------------
       // Example:
-      send_data(command_value);
+      return send_data(command_value);
       Serial.print("Send Data ");
       Serial.print(" Data Selected: ");
       Serial.println(command_value);
-      return "1 - Send Data";
       break;
     case SEND_ID_L:
       // Send Identification Function goes here --------------------------
