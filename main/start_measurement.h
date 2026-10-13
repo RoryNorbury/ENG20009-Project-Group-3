@@ -25,5 +25,5 @@ String start_measurement()
     data.fillArray(lastValues);
   }
 
-  return out
+  return out;
 }
