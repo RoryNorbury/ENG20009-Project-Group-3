@@ -59,7 +59,7 @@ void loop() {
     Serial.println(str);
     String ret = interpret_command(str);
     Serial.println(ret);
-    sendToSDI(ret);
+    sendToSDA(ret);
 
     sensorData data;
     readSensors(&data);
