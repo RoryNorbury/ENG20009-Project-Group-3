@@ -42,8 +42,7 @@ String interpret_command(String Command){
   if ((Command[0] == ADDRESS_QUERY_L) && (Command.length() == 2)) {
     // Address Query Function goes here ----------------------------------
     // Example:
-    address_query();
-    return "1 - Address Query";
+    return address_query();
   }
   int command_address = Command[0] - 48; // Gets Address from Command String
   int command_value = Command[2] - 48; // Gets Command Value from Command String
