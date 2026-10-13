@@ -62,7 +62,7 @@ String interpret_command(String Command){
     case CHANGE_ADDRESS_L:
       // Change Address Function goes here --------------------------------
       // Example:
-      change_address(command_value);
+      change_address(sdiAddress, command_value);
       Serial.print("Change Address ");
       Serial.print(" To: ");
       Serial.println(command_value);
