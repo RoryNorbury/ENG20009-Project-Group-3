@@ -2,7 +2,7 @@
 //SEND DATA FUNCTION
 #pragma once
 
-void send_data(int dIndex) {
+String send_data(int dIndex) {
   if (!dataReady) {
     Serial.print(sdiAddress);
     Serial.print("\r\n");
@@ -21,6 +21,7 @@ void send_data(int dIndex) {
 
     Serial.print(out);
     Serial.print("\r\n");
+    return out;
   } 
   else {
     Serial.print(sdiAddress);
