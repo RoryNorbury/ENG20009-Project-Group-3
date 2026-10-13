@@ -3,7 +3,7 @@
 #pragma once
 #include "sensors.h"
 
-void start_measurement()
+String start_measurement()
 {
   // prepare and print response message
   String out = String(sdiAddress);
@@ -17,13 +17,13 @@ void start_measurement()
   // <CR><LF>
   // possibly translates to <CR><CR><LF> on Windows, need to check
   out += "\r\n";
-  Serial.print(out);
 
   // retrieve data
-
   sensorData data;
   if (!readSensors(&data))
   {
     data.fillArray(lastValues);
   }
+
+  return out;
 }
