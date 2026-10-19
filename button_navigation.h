@@ -53,7 +53,7 @@ Print &lcd = Serial;               // TODO: replace with your real display objec
 
 uint32_t freeStorageKB() { return 0; }   // TODO: free space on the SD card, in KB
 
-// ---------- Button 1 action ----------
+//Button 1 action
 void manualLog() {
   // TODO: call your real logger here, e.g.
   //   saveLog(now, latest.temperature, latest.humidity, latest.pressure, latest.lux);
