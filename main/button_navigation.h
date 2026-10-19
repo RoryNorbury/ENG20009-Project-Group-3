@@ -8,10 +8,23 @@
 
 //include other functions written by the other members...
 #include <Arduino.h>
+#include "periodic_logging.h"
+
 
 const uint8_t  log_BUTTON_PIN    = 2;    // manual log button      (check the schematic)
 const uint8_t  toggle_BUTTON_PIN = 3;    // screen toggle button   (check the schematic)
 const uint32_t DEBOUNCE_MS       = 30;
+
+//defining the lcd screen
+#define TFT_CS 10
+#define TFT_RST 6 
+#define TFT_DC 7 
+#define TFT_SCLK 13   
+#define TFT_MOSI 11   
+
+//creates the display and tells program the pins
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
+
 
 // defining all button components
 struct Button {
@@ -22,9 +35,9 @@ struct Button {
 
   Button(uint8_t p) : pin(p), rawLast(false), stable(false), tChange(0) {} //define start states
 
-  void begin() { pinMode(pin, INPUT_PULLUP); }      // LOW = pressed
+  void begin() { pinMode(pin, INPUT_PULLUP); }      
 
-  bool pressed() {                                  // true exactly once per press
+  bool pressed() {                                  
     bool raw = (digitalRead(pin) == LOW);
     uint32_t now = millis();
     if (raw != rawLast) { rawLast = raw; tChange = now; }
@@ -36,27 +49,24 @@ struct Button {
   }
 };
 
+//defining buttons
 Button logBtn(log_BUTTON_PIN);
 Button toggleBtn(toggle_BUTTON_PIN);
 
-struct Reading { float temperature, humidity, pressure, gas_resistance, lux; };
-Reading latest = {24.5f, 55.0f, 1013.2f, 450.0f, 120.0f};   // testing values - input real functions
-
-// ---------- 3. Navigation state ----------
+//printing on the screen
 enum Screen { SCREEN_LIVE, SCREEN_SYSINFO };
 Screen   currentScreen = SCREEN_LIVE;
 bool     redrawNeeded  = true;     // set this to true whenever new sensor values arrive
 uint32_t logCount      = 0;
 uint32_t cachedFreeKB  = 0;
 
-Print &lcd = Serial;               // TODO: replace with your real display object
+Print &lcd = tft;               // TODO: replace with your real display object
 
 uint32_t freeStorageKB() { return 0; }   // TODO: free space on the SD card, in KB
 
 //Button 1 action
 void manualLog() {
-  // TODO: call your real logger here, e.g.
-  //   saveLog(now, latest.temperature, latest.humidity, latest.pressure, latest.lux);
+  logSensordata();
   Serial.println("manual log");
   logCount++;                      // only count it if the SD write succeeded
   redrawNeeded = true;
