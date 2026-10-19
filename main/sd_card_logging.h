@@ -1,5 +1,6 @@
 //sd card libraray
 #include "SdFat.h"
+#include "sensors.h"
 
 // define file system for sd card
 SdFs sd;
@@ -26,7 +27,7 @@ void start_SDcard(){
     while (1);
   }
 
-  if (!file.open("message.txt", O_RDWR | O_CREAT)) {
+  if (!file.open("LOG", O_RDWR | O_CREAT)) {
     sd.errorHalt(F("open failed"));
   }
 
@@ -34,6 +35,28 @@ void start_SDcard(){
 
 }
 
-void Write_SD(File& file, String log){
-  
+void logSensordata(sensorData data, String time){
+  String log "";
+  log += time + ",";
+  log += data.tempreature + ",";
+  log += data.humidity +",";
+  log += data.pressure + ",";
+  log += data.gas_resistance + ",";
+  log += data.light;
+  Write_SD(file, log);
+
+}
+
+void Write_SD(File& file, String contents){
+  file.open("LOG.CSV", O_RDWR);
+
+  file.println(contents);
+  file.close();
+}
+
+void Read_Sd(File& file){
+  file.open("LOG.CSV", O_RDWR);
+  String contents = file.readString();
+  Serial.println(contents);
+  file.close();
 }
