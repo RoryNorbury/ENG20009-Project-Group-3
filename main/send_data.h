@@ -1,25 +1,27 @@
 //Author: Hannah James || Student ID: 105339013
 //SEND DATA FUNCTION
+#pragma once
 
-void send_data(int dIndex) {
+String send_data(int dIndex) {
   if (!dataReady) {
     Serial.print(sdiAddress);
     Serial.print("\r\n");
-    return;
+    return String(sdiAddress);
   }
 
-  if (dIndex == 0) {
+  if (dIndex <= 1) {
     String out = String(sdiAddress);
 
-    for (int i = 0; i < NUM_VALUES; i++) {
-      if (lastValues[i] >= 0){
+    for (int i = 0; i < sizeof(lastValues[dIndex]) / sizeof(lastValues[0][0]); i++) {
+      if (lastValues[dIndex][i] >= 0){
         out += "+"; 
-        out += String(lastValues[i], 1);
+        out += String(lastValues[dIndex][i], 1);
       } 
     }
 
     Serial.print(out);
     Serial.print("\r\n");
+    return out;
   } 
   else {
     Serial.print(sdiAddress);

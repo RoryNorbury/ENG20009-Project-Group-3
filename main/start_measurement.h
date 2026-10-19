@@ -3,26 +3,27 @@
 #pragma once
 #include "sensors.h"
 
-void start_measurement()
+String start_measurement()
 {
   // prepare and print response message
   String out = String(sdiAddress);
   
   // Allow 5 seconds for the information to be retreived
   out += "005";
+  // indicates the amount of values in output data
   // adds NUM_VALUES to integer value of '0' ASCII character
   out += NUM_VALUES + '0';
 
   // <CR><LF>
   // possibly translates to <CR><CR><LF> on Windows, need to check
   out += "\r\n";
-  Serial.print(out);
 
   // retrieve data
-
   sensorData data;
   if (!readSensors(&data))
   {
     data.fillArray(lastValues);
   }
+
+  return out;
 }

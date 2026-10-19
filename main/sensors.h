@@ -22,6 +22,11 @@ BH1750 lightSensor;
 
 Adafruit_BME680 bme;
 
+namespace sensors
+{
+  bool inited = false;
+}
+
 struct sensorData
 {
   float temperature;    // in Celsius
@@ -29,13 +34,13 @@ struct sensorData
   float pressure;       // in Pascals
   float gas_resistance; // in kilo Ohms
   float light;          // in LUX
-  void fillArray(float array[5])
+  void fillArray(float array[2][4])
   {
-    array[0] = temperature;
-    array[1] = humidity;
-    array[2] = pressure;
-    array[3] = gas_resistance;
-    array[4] = light;
+    array[0][0] = temperature;
+    array[0][1] = humidity;
+    array[0][2] = pressure;
+    array[0][3] = gas_resistance;
+    array[1][0] = light;
   }
 };
 
@@ -62,6 +67,8 @@ bool initSensors()
   bme.setPressureOversampling(BME680_OS_4X);
   bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
   bme.setGasHeater(320, 150); // 320*C for 150 ms
+
+  sensors::inited = true;
   return 0;
 }
 

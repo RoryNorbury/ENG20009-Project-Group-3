@@ -8,6 +8,8 @@
 
 // will not be part of final program
 // makes use of a while loop, which will effectivly pause the program, so may break things
+#pragma once
+
 
 String serial_test_input_string(){
   Serial.println("");
