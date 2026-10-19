@@ -1,3 +1,5 @@
+#pragma once
+
 //sd card libraray
 #include "SdFat.h"
 #include "sensors.h"
@@ -38,11 +40,11 @@ void start_SDcard(){
 void logSensordata(sensorData data, String time){
   String log "";
   log += time + ",";
-  log += data.tempreature + ",";
-  log += data.humidity +",";
-  log += data.pressure + ",";
-  log += data.gas_resistance + ",";
-  log += data.light;
+  log += String(data.tempreature) + ",";
+  log += String(data.humidity) +",";
+  log += String(data.pressure) + ",";
+  log += String(data.gas_resistance) + ",";
+  log += String(data.light);
   Write_SD(file, log);
 
 }
