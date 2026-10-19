@@ -4,7 +4,7 @@
 
 #include "sensors.h"
 #include "rtc.h"
-#include "sd_card_logging"
+#include "sd_card_logging.h"
 
 namespace periodic_logging
 {
