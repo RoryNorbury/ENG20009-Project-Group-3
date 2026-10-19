@@ -93,7 +93,9 @@ void loop() {
     }
     else
     {
-      updateLCD(lastValues);
+      float values[2][4];
+      data.fillArray(values);
+      updateLCD(values);
       digitalWrite(ledAlertPin, LOW);
     }
   }
