@@ -24,6 +24,8 @@ float lastValues[2][4] = {
 #include "LCD.h"
 #include "threshold_alert.h"
 #include "SDA.h"
+#include "periodic_logging.h"
+#include "rtc.h"
 
 // variable declarations here
 int ledAlertPin = 11;
@@ -44,6 +46,12 @@ void setup() {
     exit(1);
   }
 
+  if (rtc::initRTC(true))
+  {
+    Serial.println("Could not initialise rtc, exiting");
+    exit(1);
+  }
+
   delay(1000);
   Serial.println("Compliant sensor node");
 
@@ -59,7 +67,9 @@ void loop() {
     Serial.println(str);
     String ret = interpret_command(str);
     Serial.println(ret);
-    sendToSDI(ret);
+    sendToSDA(ret);
+
+    update_periodic_logging();
 
     sensorData data;
     readSensors(&data);

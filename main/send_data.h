@@ -6,7 +6,7 @@ String send_data(int dIndex) {
   if (!dataReady) {
     Serial.print(sdiAddress);
     Serial.print("\r\n");
-    return;
+    return String(sdiAddress);
   }
 
   if (dIndex <= 1) {
