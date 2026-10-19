@@ -34,8 +34,8 @@ void setup() {
   // setup here
   Serial.begin(9600); //9600 for arduino to PC communication
   Serial1.begin(1200, SERIAL_7E1); //1200 baud for SDI, 7 data bits and 1 error bit
-  pinMode(7, OUTPUT);   
-  digitalWrite(7, HIGH); //HIGH = READ. LOW = WRITE
+  pinMode(8, OUTPUT);   
+  digitalWrite(8, HIGH); //HIGH = READ. LOW = WRITE
 
   pinMode(ledAlertPin, OUTPUT);
   digitalWrite(ledAlertPin, HIGH);
@@ -77,26 +77,23 @@ void handle_input()
 }
 
 void loop() {
-  // main code here
-  while (1) {
-    handle_input();
+  handle_input();
 
-    update_periodic_logging();
+  update_periodic_logging();
 
-    sensorData data;
-    readSensors(&data);
-    uint8_t alerts = check_alert_thresholds(data);
-    if (alerts > 0)
-    {
-      displayAlert(alerts);
-      digitalWrite(ledAlertPin, HIGH);
-    }
-    else
-    {
-      float values[2][4];
-      data.fillArray(values);
-      updateLCD(values);
-      digitalWrite(ledAlertPin, LOW);
-    }
+  sensorData data;
+  readSensors(&data);
+  uint8_t alerts = check_alert_thresholds(data);
+  if (alerts > 0)
+  {
+    displayAlert(alerts);
+    digitalWrite(ledAlertPin, HIGH);
+  }
+  else
+  {
+    float values[2][4];
+    data.fillArray(values);
+    updateLCD(values);
+    digitalWrite(ledAlertPin, LOW);
   }
 }

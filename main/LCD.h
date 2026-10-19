@@ -28,8 +28,8 @@ void updateLCD(float data[2][4])
     tft.fillScreen(ST77XX_BLACK);
     tft.setTextColor(ST77XX_WHITE);
     tft.setTextSize(1);
+    
     //clear screen, then display: temp, humidity, pressure, and gas resistance on LCD
-    tft.fillScreen(ST77XX_BLACK);
     tft.setCursor(0, 0);
     tft.print("Temperature: ");
     tft.print(data[0][0], 1); // rounded to 1dp
