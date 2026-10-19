@@ -19,7 +19,7 @@ const int SOFT_SCK_PIN = 13;
 // SdFat software SPI template
 SoftSpiDriver<SOFT_MISO_PIN, SOFT_MOSI_PIN, SOFT_SCK_PIN> softSpi;
 
-#define SD_CONFIG SdSpiConfig(SD_CS_PIN, SHARED_SPI, SD_SCK_MHZ(0), $softSpi)
+#define SD_CONFIG SdSpiConfig(SD_CS_PIN, SHARED_SPI, SD_SCK_MHZ(0), &softSpi)
 
 void start_SDcard(){
 
@@ -37,10 +37,18 @@ void start_SDcard(){
 
 }
 
+void Write_SD(File& file, String contents){
+  file.open("LOG.CSV", O_RDWR);
+
+  file.println(contents);
+  file.close();
+}
+
+
 void logSensordata(sensorData data, String time){
-  String log "";
+  String log = "";
   log += time + ",";
-  log += String(data.tempreature) + ",";
+  log += String(data.temperature) + ",";
   log += String(data.humidity) +",";
   log += String(data.pressure) + ",";
   log += String(data.gas_resistance) + ",";
@@ -49,12 +57,6 @@ void logSensordata(sensorData data, String time){
 
 }
 
-void Write_SD(File& file, String contents){
-  file.open("LOG.CSV", O_RDWR);
-
-  file.println(contents);
-  file.close();
-}
 
 void Read_Sd(File& file){
   file.open("LOG.CSV", O_RDWR);
