@@ -60,14 +60,26 @@ void setup() {
   tft.setRotation(3);
 }
 
+void handle_input()
+{
+  if (Serial1.available() > 0)
+  {
+    String str = Serial1.readString(); // reads string from Serial Monitor
+    str = str.substring(1); //removes weird square/junk character
+    str.trim(); //removes trailing whitespace
+    Serial.println(str);
+
+    String ret = interpret_command(str);
+
+    Serial.println(ret);
+    sendToSDA(ret);
+  }
+}
+
 void loop() {
   // main code here
   while (1) {
-    String str = serial_test_input_string();
-    Serial.println(str);
-    String ret = interpret_command(str);
-    Serial.println(ret);
-    sendToSDA(ret);
+    handle_input();
 
     update_periodic_logging();
 
