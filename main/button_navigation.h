@@ -9,22 +9,12 @@
 //include other functions written by the other members...
 #include <Arduino.h>
 #include "periodic_logging.h"
+#include "LCD.h"
 
 
 const uint8_t  log_BUTTON_PIN    = 2;    // manual log button      (check the schematic)
 const uint8_t  toggle_BUTTON_PIN = 3;    // screen toggle button   (check the schematic)
 const uint32_t DEBOUNCE_MS       = 30;
-
-//defining the lcd screen
-#define TFT_CS 10
-#define TFT_RST 6 
-#define TFT_DC 7 
-#define TFT_SCLK 13   
-#define TFT_MOSI 11   
-
-//creates the display and tells program the pins
-Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
-
 
 // defining all button components
 struct Button {
@@ -72,40 +62,41 @@ void manualLog() {
   redrawNeeded = true;
 }
 
-// printing on the LCD screen
-void drawLiveScreen() { //printing everything on the same line so it is all one line
-  lcd.print("Temperature: "); lcd.print(latest.temperature, 1);    lcd.println(" C");
-  lcd.print("Humidity: ");    lcd.print(latest.humidity, 1);       lcd.println(" %");
-  lcd.print("Pressure: ");    lcd.print(latest.pressure, 1);       lcd.println(" hPa");
-  lcd.print("Gas: ");         lcd.print(latest.gas_resistance, 1); lcd.println();
-  lcd.print("Lux: ");         lcd.print(latest.lux, 0);            lcd.println(" lx");
+
+//PRINT THE LCD USING LCD.h
+   float data[2][4];             // global...
+   void printLcdScreen() {
+     updateLCD(data);
 }
 
 void drawSystemInfo() {
+  tft.setCursor(0, 0);
+  tft.setTextSize(1);
+  tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
   lcd.println("SYSTEM INFO");
   lcd.print("Logs: ");  lcd.println(logCount);
   lcd.print("Free: ");  lcd.print(cachedFreeKB);  lcd.println(" KB");
 }
 
-void setup() {
+
+void buttonSetup() {
   Serial.begin(115200);
   logBtn.begin();
   toggleBtn.begin();
 }
 
-void loop() {
+void buttonLoop() {
   if (logBtn.pressed()) manualLog();                 // Button 1
 
   if (toggleBtn.pressed()) {                         // Button 2
     currentScreen = (currentScreen == SCREEN_LIVE) ? SCREEN_SYSINFO : SCREEN_LIVE;
     if (currentScreen == SCREEN_SYSINFO) cachedFreeKB = freeStorageKB();  // once per visit, can be slow
     redrawNeeded = true;
-    // TODO: clear the LCD here before drawing the new screen
   }
 
   if (redrawNeeded) {                                // draw only when something changed
     redrawNeeded = false;
-    if (currentScreen == SCREEN_LIVE) drawLiveScreen();
+    if (currentScreen == SCREEN_LIVE) printLcdScreen();
     else                              drawSystemInfo();
   }
 }
