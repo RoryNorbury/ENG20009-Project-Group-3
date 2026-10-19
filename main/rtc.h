@@ -10,7 +10,7 @@ namespace rtc
 
     /// @brief initialise rtc
     /// @return 0 on success, 1 on error
-    bool initRTC()
+    bool initRTC(bool check_out_of_sync)
     {
         // initialise
         if (!rtc.begin())
@@ -24,13 +24,16 @@ namespace rtc
             Serial.println("RTC is not running, setting time");
             rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
         }
-        // Adjust rtc if it is too far from real time (>10 seconds)
-        if (abs((rtc.now() - DateTime(F(__DATE__), F(__TIME__))).totalseconds()) > 10)
+        if (check_out_of_sync)
         {
-            Serial.println("RTC is out of sync, setting time");
-            rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+            // Adjust rtc if it is too far from real time (>10 seconds)
+            if (abs((rtc.now() - DateTime(F(__DATE__), F(__TIME__))).totalseconds()) > 10)
+            {
+                Serial.println("RTC is out of sync, setting time");
+                rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+            }
         }
-        return false;
+            return false;
     }
 
     DateTime getDateTime()
@@ -38,11 +41,20 @@ namespace rtc
         return rtc.now();
     }
 
-    String getTimeString(bool use24Hour)
+    String getTimeString(bool use_24_hour)
     {
         DateTime now = rtc.now();
-        char formatBuffer[] = "hh:mm AP";
-        String out = String(now.toString(formatBuffer));
+        String out;
+        if (use_24_hour)
+        {
+            char formatBuffer[] = "hh:mm:ss";
+            out = String(now.toString(formatBuffer));
+        }
+        else
+        {
+            char formatBuffer[] = "hh:mm:ss ap";
+            out = String(now.toString(formatBuffer));
+        }
         return out;
     }
 }

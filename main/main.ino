@@ -46,7 +46,7 @@ void setup() {
     exit(1);
   }
 
-  if (rtc::initRTC())
+  if (rtc::initRTC(true))
   {
     Serial.println("Could not initialise rtc, exiting");
     exit(1);
