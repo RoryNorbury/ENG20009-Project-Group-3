@@ -10,10 +10,13 @@
 #include <Arduino.h>
 #include "periodic_logging.h"
 #include "LCD.h"
+#include <SdFat.h>
+
+extern SdFs sd; 
 
 
-const uint8_t  log_BUTTON_PIN    = 2;    // manual log button      (check the schematic)
-const uint8_t  toggle_BUTTON_PIN = 3;    // screen toggle button   (check the schematic)
+const uint8_t  log_BUTTON_PIN    = 2;    // manual log button
+const uint8_t  toggle_BUTTON_PIN = 3;    // screen toggle button
 const uint32_t DEBOUNCE_MS       = 30;
 
 // defining all button components
@@ -50,9 +53,14 @@ bool     redrawNeeded  = true;     // set this to true whenever new sensor value
 uint32_t logCount      = 0;
 uint32_t cachedFreeKB  = 0;
 
-Print &lcd = tft;               // TODO: replace with your real display object
+Print &lcd = tft;
 
-uint32_t freeStorageKB() { return 0; }   // TODO: free space on the SD card, in KB
+uint32_t freeStorageKB() { 
+freeClusters = sd.vol()->freeClusterCount();   // -1 means a read error
+if (freeClusters < 0) return 0;
+uint64_t bytes = (uint64_t)freeClusters * sd.vol()->bytesPerCluster();
+return (uint32_t)(bytes / 1024);                       // KB
+}
 
 //Button 1 action
 void manualLog() {
@@ -61,7 +69,6 @@ void manualLog() {
   logCount++;                      // only count it if the SD write succeeded
   redrawNeeded = true;
 }
-
 
 //PRINT THE LCD USING LCD.h
    float data[2][4];             // global...
