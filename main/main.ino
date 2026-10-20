@@ -53,6 +53,8 @@ void setup() {
     exit(1);
   }
 
+  start_SDcard()
+
   delay(1000);
   Serial.println("Compliant sensor node");
 
