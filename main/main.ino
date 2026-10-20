@@ -16,7 +16,8 @@ float lastValues[2][4] = {
     0
   }
 };
-
+bool wasAlerted = false;
+bool isLog = false;
 
 #include "command_parser.h"
 #include "serial_monitor_input_for_testing.h"
@@ -58,6 +59,7 @@ void setup() {
   //LCD init:
   tft.initR(INITR_BLACKTAB);
   tft.setRotation(3);
+  tft.fillScreen(ST77XX_BLACK);
 }
 
 void handle_input()
@@ -86,12 +88,20 @@ void loop() {
   uint8_t alerts = check_alert_thresholds(data);
   if (alerts > 0)
   {
+    if (!wasAlerted){
+      tft.fillScreen(ST77XX_BLACK);
+      wasAlerted = true;
+    }
     displayAlert(alerts);
     digitalWrite(ledAlertPin, HIGH);
   }
   else
   {
     float values[2][4];
+    if (wasAlerted){
+      tft.fillScreen(ST77XX_BLACK);
+      wasAlerted = false;
+    }
     data.fillArray(values);
     updateLCD(values);
     digitalWrite(ledAlertPin, LOW);

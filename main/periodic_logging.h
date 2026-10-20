@@ -19,6 +19,7 @@ void logSensordata()
     String time = rtc::getTimeString(true);
     logSensordata(data, time);
     Serial.println("Writing to sd card: [" + time + "]," + String(data.temperature) + "," + String(data.humidity) + "," + String(data.pressure) + "," + String(data.gas_resistance) + "," + String(data.light));
+    isLog = true;
 }
 
 void update_periodic_logging()
