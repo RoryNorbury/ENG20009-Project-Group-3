@@ -25,6 +25,7 @@ void Clear_SD(File& file){
   sd.remove("LOG.CSV");
   file.open("LOG.CSV", O_RDWR | O_CREAT);
   file.println("TimeStamp,temperature,humidity,pressure,gasresistance,light");
+  file.close();
 }
 
 void start_SDcard(){
@@ -37,10 +38,8 @@ void start_SDcard(){
 
   if (!file.open("LOG.CSV", O_RDWR)) {
     Clear_SD(file);
+    Serial.println("Open");
   }
-
-  file.close(); //release file
-
 }
 
 void Write_SD(File& file, String contents){
