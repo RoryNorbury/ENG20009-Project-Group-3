@@ -17,14 +17,12 @@
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST); //creates object called tft
 
 int lastLCDDraw = 0;
-int LCDDrawPeriod = 3000;
+int LCDDrawPeriod = 6000;
 
 void updateLCD(float data[2][4])
 {
   if (millis() > lastLCDDraw + LCDDrawPeriod)
   {
-    Serial.print("Updating LCD with data: \nlastLCDDraw: ");
-    Serial.println(lastLCDDraw);
     lastLCDDraw = millis();
 
     tft.setTextColor(ST77XX_WHITE,  ST77XX_BLACK);
