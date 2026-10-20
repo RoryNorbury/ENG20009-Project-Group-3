@@ -29,7 +29,7 @@ void start_SDcard(){
     while (1);
   }
 
-  if (!file.open("LOG", O_RDWR | O_CREAT)) {
+  if (!file.open("LOG.CSV", O_RDWR | O_CREAT)) {
     sd.errorHalt(F("open failed"));
   }
 
@@ -38,10 +38,11 @@ void start_SDcard(){
 }
 
 void Write_SD(File& file, String contents){
-  file.open("LOG.CSV", O_RDWR);
+  file.open("LOG.CSV", O_RDWR | O_AT_END);
 
   file.println(contents);
   file.close();
+  Serial.println("Writing SD");
 }
 
 
@@ -58,9 +59,20 @@ void logSensordata(sensorData data, String time){
 }
 
 
-void Read_Sd(File& file){
+void Read_SD(File& file){
   file.open("LOG.CSV", O_RDWR);
   String contents = file.readString();
   Serial.println(contents);
   file.close();
+  Serial.println("Reading SD");
 }
+
+
+void Clear_SD(File& file){
+  sd.remove("LOG.CSV");
+  file.open("LOG.CSV", O_RDWR | O_CREAT);
+  file.println("TimeStamp,temperature,humidity,pressure,gasresistance,light");
+  Serial.println("cleared LOG.CSV");
+}
+
+
