@@ -27,6 +27,7 @@ bool isLog = false;
 #include "SDA.h"
 #include "periodic_logging.h"
 #include "rtc.h"
+#include "timerInterrupts.h"
 
 // variable declarations here
 int ledAlertPin = 11;
@@ -62,6 +63,12 @@ void setup() {
   tft.initR(INITR_BLACKTAB);
   tft.setRotation(3);
   tft.fillScreen(ST77XX_BLACK);
+
+  readSensors(&latestData);
+  
+  //attach ISR for rolling avg
+  Timer1.attachInterrupt(rollingAvg);
+  Timer1.start(100000); // 100ms = 10Hz
 }
 
 void handle_input()
@@ -85,9 +92,13 @@ void loop() {
 
   update_periodic_logging();
 
-  sensorData data;
-  readSensors(&data);
-  uint8_t alerts = check_alert_thresholds(data);
+  updateRollingAvg();
+  if (!avgReady)
+  {
+    return;
+  }
+  
+  uint8_t alerts = check_alert_thresholds(avgData);
   if (alerts > 0)
   {
     if (!wasAlerted){
@@ -104,7 +115,7 @@ void loop() {
       tft.fillScreen(ST77XX_BLACK);
       wasAlerted = false;
     }
-    data.fillArray(values);
+    avgData.fillArray(values);
     updateLCD(values);
     digitalWrite(ledAlertPin, LOW);
   }
