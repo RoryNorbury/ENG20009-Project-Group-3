@@ -39,9 +39,12 @@ void updateRollingAvg() {
   sampleDue = false;
 
   // non-blocking read of BH1750
-  float lux = lightSensor.readLightLevel();
-  if (lux >= 0) {
-    latestData.light = lux;
+  if (lightSensor.measurementReady()) {
+    float lux = lightSensor.readLightLevel();
+
+    if (lux >= 0) {
+        latestData.light = lux;
+    }
   }
 
   // non-blocking read of BME680
