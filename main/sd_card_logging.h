@@ -21,6 +21,12 @@ SoftSpiDriver<SOFT_MISO_PIN, SOFT_MOSI_PIN, SOFT_SCK_PIN> softSpi;
 
 #define SD_CONFIG SdSpiConfig(SD_CS_PIN, SHARED_SPI, SD_SCK_MHZ(0), &softSpi)
 
+void Clear_SD(File& file){
+  sd.remove("LOG.CSV");
+  file.open("LOG.CSV", O_RDWR | O_CREAT);
+  file.println("TimeStamp,temperature,humidity,pressure,gasresistance,light");
+}
+
 void start_SDcard(){
 
   if (!sd.begin(SD_CONFIG)) {
@@ -64,11 +70,5 @@ void Read_SD(File& file){
   file.close();
 }
 
-
-void Clear_SD(File& file){
-  sd.remove("LOG.CSV");
-  file.open("LOG.CSV", O_RDWR | O_CREAT);
-  file.println("TimeStamp,temperature,humidity,pressure,gasresistance,light");
-}
 
 
