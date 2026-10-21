@@ -10,10 +10,10 @@
 #include <Arduino.h>
 #include "periodic_logging.h"
 #include "LCD.h"
-#include <SdFat.h>
+#include <SdFat.h>  //provides the SdFs type, which is needed to ask the SD card for free space
 
 extern SdFs sd; 
-
+extern float data [2][4];
 
 const uint8_t  log_BUTTON_PIN    = 2;    // manual log button
 const uint8_t  toggle_BUTTON_PIN = 3;    // screen toggle button
@@ -26,7 +26,8 @@ struct Button {
   bool     stable;
   uint32_t tChange;
 
-  Button(uint8_t p) : pin(p), rawLast(false), stable(false), tChange(0) {} //define start states
+  //starting values for the button after being pressed
+  Button(uint8_t p) : pin(p), rawLast(false), stable(false), tChange(0) {}
 
   void begin() { pinMode(pin, INPUT_PULLUP); }      
 
@@ -42,7 +43,7 @@ struct Button {
   }
 };
 
-//defining buttons
+//defining buttons - each has all factors defined before
 Button logBtn(log_BUTTON_PIN);
 Button toggleBtn(toggle_BUTTON_PIN);
 
@@ -55,8 +56,9 @@ uint32_t cachedFreeKB  = 0;
 
 Print &lcd = tft;
 
-uint32_t freeStorageKB() { 
-freeClusters = sd.vol()->freeClusterCount();   // -1 means a read error
+//how many unused clusters does the SD card have?
+int32_t freeStorageKB() { //means it will return numbers - void returns nothing
+int32_t freeClusters = sd.vol()->freeClusterCount();   // -1 means a read error
 if (freeClusters < 0) return 0;
 uint64_t bytes = (uint64_t)freeClusters * sd.vol()->bytesPerCluster();
 return (uint32_t)(bytes / 1024);                       // KB
@@ -70,14 +72,13 @@ void manualLog() {
   redrawNeeded = true;
 }
 
-//PRINT THE LCD USING LCD.h
-   float data[2][4];             // global...
+//PRINT THE LCD USING LCD.h            // global...
    void printLcdScreen() {
      updateLCD(data);
 }
 
 void drawSystemInfo() {
-  tft.setCursor(0, 0);
+  tft.setCursor(0, 0); //cursor top left
   tft.setTextSize(1);
   tft.setTextColor(ST77XX_WHITE, ST77XX_BLACK);
   lcd.println("SYSTEM INFO");
@@ -86,13 +87,13 @@ void drawSystemInfo() {
 }
 
 
-void buttonSetup() {
+void buttonSetup() { //NEEDS TO BE CALLED IN MAIN -- apparently...
   Serial.begin(115200);
   logBtn.begin();
   toggleBtn.begin();
 }
 
-void buttonLoop() {
+void buttonLoop() { //NEEDS TO BE CALLED IN MAIN -- apparently...
   if (logBtn.pressed()) manualLog();                 // Button 1
 
   if (toggleBtn.pressed()) {                         // Button 2
