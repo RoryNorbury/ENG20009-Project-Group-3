@@ -87,7 +87,7 @@ void drawSystemInfo() {
 }
 
 
-void buttonSetup() { //NEEDS TO BE CALLED IN MAIN -- apparently...
+void buttonSetup() { //NEEDS TO BE CALLED IN MAIN --
   Serial.begin(115200);
   logBtn.begin();
   toggleBtn.begin();
