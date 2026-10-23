@@ -1,11 +1,4 @@
-// Button navigation task (ENG20009 Credit)
-// Button 1: force an immediate manual log entry to the SD card.
-// Button 2: toggle between the live data screen and the "System Info" screen
-//           (total log count and free storage/status).
-//
-// Standalone test version: output goes to Serial so you can test the buttons now.
-// Lines marked TODO are where main's real code (SD, LCD, sensors) plugs in.
-
+// 105339013 - credit task - Button Navigation
 //include other functions written by the other members...
 #include <Arduino.h>
 #include "periodic_logging.h"
