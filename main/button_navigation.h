@@ -13,7 +13,7 @@ const uint8_t  toggle_BUTTON_PIN = 3;    // screen toggle button
 const uint32_t DEBOUNCE_MS = 30;
 
 const uint32_t LIVE_REFRESH_MS = 1000;
-const uint32_t lastDrawMs = 0;
+uint32_t lastDrawMs = 0;
 
 
 // defining all button components
