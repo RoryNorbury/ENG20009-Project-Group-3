@@ -1,3 +1,5 @@
+#pragma once
+
 //sd card libraray
 #include "SdFat.h"
 #include "sensors.h"
@@ -17,7 +19,14 @@ const int SOFT_SCK_PIN = 13;
 // SdFat software SPI template
 SoftSpiDriver<SOFT_MISO_PIN, SOFT_MOSI_PIN, SOFT_SCK_PIN> softSpi;
 
-#define SD_CONFIG SdSpiConfig(SD_CS_PIN, SHARED_SPI, SD_SCK_MHZ(0), $softSpi)
+#define SD_CONFIG SdSpiConfig(SD_CS_PIN, SHARED_SPI, SD_SCK_MHZ(0), &softSpi)
+
+void Clear_SD(File& file){
+  sd.remove("LOG.CSV");
+  file.open("LOG.CSV", O_RDWR | O_CREAT);
+  file.println("TimeStamp,temperature,humidity,pressure,gasresistance,light");
+  file.close();
+}
 
 void start_SDcard(){
 
@@ -27,36 +36,38 @@ void start_SDcard(){
     while (1);
   }
 
-  if (!file.open("LOG", O_RDWR | O_CREAT)) {
-    sd.errorHalt(F("open failed"));
+  if (!file.open("LOG.CSV", O_RDWR)) {
+    Clear_SD(file);
+    Serial.println("Open");
   }
-
-  file.close(); //release file
-
-}
-
-void logSensordata(sensorData data, String time){
-  String log "";
-  log += time + ",";
-  log += data.tempreature + ",";
-  log += data.humidity +",";
-  log += data.pressure + ",";
-  log += data.gas_resistance + ",";
-  log += data.light;
-  Write_SD(file, log);
-
 }
 
 void Write_SD(File& file, String contents){
-  file.open("LOG.CSV", O_RDWR);
-
+  file.open("LOG.CSV", O_RDWR | O_AT_END);
   file.println(contents);
   file.close();
 }
 
-void Read_Sd(File& file){
+
+void logSensordata(sensorData data, String time){
+  String log = "";
+  log += time + ",";
+  log += String(data.temperature) + ",";
+  log += String(data.humidity) +",";
+  log += String(data.pressure) + ",";
+  log += String(data.gas_resistance) + ",";
+  log += String(data.light);
+  Write_SD(file, log);
+
+}
+
+
+void Read_SD(File& file){
   file.open("LOG.CSV", O_RDWR);
   String contents = file.readString();
   Serial.println(contents);
   file.close();
 }
+
+
+

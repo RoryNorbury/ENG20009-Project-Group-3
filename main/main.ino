@@ -16,7 +16,8 @@ float lastValues[2][4] = {
     0
   }
 };
-
+bool wasAlerted = false;
+bool isLog = false;
 
 #include "command_parser.h"
 #include "serial_monitor_input_for_testing.h"
@@ -26,6 +27,7 @@ float lastValues[2][4] = {
 #include "SDA.h"
 #include "periodic_logging.h"
 #include "rtc.h"
+#include "timerInterrupts.h"
 
 // variable declarations here
 int ledAlertPin = 11;
@@ -34,8 +36,8 @@ void setup() {
   // setup here
   Serial.begin(9600); //9600 for arduino to PC communication
   Serial1.begin(1200, SERIAL_7E1); //1200 baud for SDI, 7 data bits and 1 error bit
-  pinMode(7, OUTPUT);   
-  digitalWrite(7, HIGH); //HIGH = READ. LOW = WRITE
+  pinMode(8, OUTPUT);   
+  digitalWrite(8, HIGH); //HIGH = READ. LOW = WRITE
 
   pinMode(ledAlertPin, OUTPUT);
   digitalWrite(ledAlertPin, HIGH);
@@ -52,37 +54,69 @@ void setup() {
     exit(1);
   }
 
+  start_SDcard();
+
   delay(1000);
   Serial.println("Compliant sensor node");
 
   //LCD init:
   tft.initR(INITR_BLACKTAB);
   tft.setRotation(3);
+  tft.fillScreen(ST77XX_BLACK);
+
+  readSensors(&latestData);
+  
+  //attach ISR for rolling avg
+  Timer1.attachInterrupt(rollingAvg);
+  Timer1.start(100000); // 100ms = 10Hz
+}
+
+void handle_input()
+{
+  if (Serial1.available() > 0)
+  {
+    String str = Serial1.readString(); // reads string from Serial Monitor
+    str = str.substring(1); //removes weird square/junk character
+    str.trim(); //removes trailing whitespace
+    Serial.println(str);
+
+    String ret = interpret_command(str);
+
+    Serial.println(ret);
+    sendToSDA(ret);
+  }
 }
 
 void loop() {
-  // main code here
-  while (1) {
-    String str = serial_test_input_string();
-    Serial.println(str);
-    String ret = interpret_command(str);
-    Serial.println(ret);
-    sendToSDA(ret);
+  handle_input();
 
-    update_periodic_logging();
+  update_periodic_logging();
 
-    sensorData data;
-    readSensors(&data);
-    uint8_t alerts = check_alert_thresholds(data);
-    if (alerts > 0)
-    {
-      displayAlert(alerts);
-      digitalWrite(ledAlertPin, HIGH);
+  updateRollingAvg();
+  if (!avgReady)
+  {
+    return;
+  }
+  
+  uint8_t alerts = check_alert_thresholds(avgData);
+  if (alerts > 0)
+  {
+    if (!wasAlerted){
+      tft.fillScreen(ST77XX_BLACK);
+      wasAlerted = true;
     }
-    else
-    {
-      updateLCD(lastValues);
-      digitalWrite(ledAlertPin, LOW);
+    displayAlert(alerts);
+    digitalWrite(ledAlertPin, HIGH);
+  }
+  else
+  {
+    float values[2][4];
+    if (wasAlerted){
+      tft.fillScreen(ST77XX_BLACK);
+      wasAlerted = false;
     }
+    avgData.fillArray(values);
+    updateLCD(values);
+    digitalWrite(ledAlertPin, LOW);
   }
 }
