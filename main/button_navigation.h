@@ -10,7 +10,11 @@ extern float data [2][4];
 
 const uint8_t  log_BUTTON_PIN    = 2;    // manual log button
 const uint8_t  toggle_BUTTON_PIN = 3;    // screen toggle button
-const uint32_t DEBOUNCE_MS       = 30;
+const uint32_t DEBOUNCE_MS = 30;
+
+const uint32_t LIVE_REFRESH_MS = 1000;
+const uint32_t lastDrawMs = 0;
+
 
 // defining all button components
 struct Button {
@@ -92,11 +96,13 @@ void buttonLoop() { //NEEDS TO BE CALLED IN MAIN -- apparently...
   if (toggleBtn.pressed()) {                         // Button 2
     currentScreen = (currentScreen == SCREEN_LIVE) ? SCREEN_SYSINFO : SCREEN_LIVE;
     if (currentScreen == SCREEN_SYSINFO) cachedFreeKB = freeStorageKB();  // once per visit, can be slow
+    tft.fillScreen(ST77XX_BLACK);
     redrawNeeded = true;
   }
 
-  if (redrawNeeded) {                                // draw only when something changed
+  if (redrawNeeded || (millis() - lastDrawMs >= LIVE_REFRESH_MS)) {                                // draw only when something changed
     redrawNeeded = false;
+    lastDrawMs = millis();
     if (currentScreen == SCREEN_LIVE) printLcdScreen();
     else                              drawSystemInfo();
   }
