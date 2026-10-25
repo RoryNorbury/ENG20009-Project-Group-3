@@ -31,13 +31,14 @@ bool isLog = false;
 
 // variable declarations here
 int ledAlertPin = 11;
+int DIRO = 8;
 
 void setup() {
   // setup here
   Serial.begin(9600); //9600 for arduino to PC communication
   Serial1.begin(1200, SERIAL_7E1); //1200 baud for SDI, 7 data bits and 1 error bit
-  pinMode(8, OUTPUT);   
-  digitalWrite(8, HIGH); //HIGH = READ. LOW = WRITE
+  pinMode(DIRO, OUTPUT);   
+  digitalWrite(DIRO, HIGH); //HIGH = READ. LOW = WRITE
 
   pinMode(ledAlertPin, OUTPUT);
   digitalWrite(ledAlertPin, HIGH);
@@ -83,7 +84,7 @@ void handle_input()
     String ret = interpret_command(str);
 
     Serial.println(ret);
-    sendToSDA(ret);
+    sendToSDA(ret, DIRO);
   }
 }
 

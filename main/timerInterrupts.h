@@ -31,7 +31,7 @@ void printAvg() { // debugging function
   Serial.println(out);
 }
 
-// takes one sample every 50 ms
+// takes one sample every 100 ms
 void updateRollingAvg() {
   if (!sampleDue) {
     return;
