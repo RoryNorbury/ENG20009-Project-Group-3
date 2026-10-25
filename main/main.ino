@@ -25,7 +25,6 @@ bool isLog = false;
 #include "LCD.h"
 #include "threshold_alert.h"
 #include "SDA.h"
-#include "periodic_logging.h"
 #include "rtc.h"
 #include "timerInterrupts.h"
 #include "interrupt_logging.h"
@@ -71,6 +70,9 @@ void setup() {
   //attach ISR for rolling avg
   Timer1.attachInterrupt(rollingAvg);
   Timer1.start(100000); // 100ms = 10Hz
+
+  // set up interrupt for logging
+  setupInterruptLogging();
 }
 
 void handle_input()
@@ -92,13 +94,13 @@ void handle_input()
 void loop() {
   handle_input();
 
-  update_periodic_logging();
-
   updateRollingAvg();
   if (!avgReady)
   {
     return;
   }
+
+  runInterruptLogging();
   
   uint8_t alerts = check_alert_thresholds(avgData);
   if (alerts > 0)
