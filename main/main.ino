@@ -28,6 +28,7 @@ bool isLog = false;
 #include "periodic_logging.h"
 #include "rtc.h"
 #include "timerInterrupts.h"
+#include "interrupt_logging.h"
 
 // variable declarations here
 int ledAlertPin = 11;
