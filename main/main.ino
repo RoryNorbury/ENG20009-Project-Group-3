@@ -143,7 +143,7 @@ void loop() {
       tft.fillScreen(ST77XX_BLACK);
       wasAlerted = false;
     }
-    if (liveDataScreen){
+    if (!liveDataScreen){
       displaySystemInfo();
     }
     else{
