@@ -5,6 +5,7 @@
 #include "sd_card_logging.h"
 #include "timerInterrupts.h"
 #include "rtc.h"
+#include <DueTimer.h>
 
 volatile bool interruptLoggingFlag = false;
 

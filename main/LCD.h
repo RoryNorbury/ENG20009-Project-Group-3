@@ -18,7 +18,7 @@
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST); //creates object called tft
 
 int lastLCDDraw = 0;
-int LCDDrawPeriod = 6000;
+int LCDDrawPeriod = 4000; // update LCD every 4 s
 
 void updateLCD(float avgData[2][4])
 {

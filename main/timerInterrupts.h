@@ -4,20 +4,26 @@
 #pragma once
 
 #include <DueTimer.h>
-#include "sensors.h"
 
-#define AVG_SAMPLES 5
+#define SAMPLE_INT     500000 // MICROseconds. Decrease with CAUTION! comment out printAvg(); [L97] below 100ms
+#define AVG_SAMPLES      5
+#define NUM_VARS         5
 
-volatile bool sampleDue = false;
+#define ROW_TEMP     0
+#define ROW_HUMIDITY 1
+#define ROW_PRESSURE 2
+#define ROW_GAS      3
+#define ROW_LIGHT    4
 
-sensorData latestData;
-sensorData sumData;
-sensorData avgData;
+
+float dataMatrix[NUM_VARS][AVG_SAMPLES];
 int sampleCount = 0;
-bool avgReady = false;
+sensorData latestData;
+sensorData avgData;
+volatile bool avgReady = false;
 
 void printAvg() { // debugging function
-  String out = "Avg: ";
+String out = "Avg: ";
   out += "T=" + String(avgData.temperature, 1) + " C, ";
   out += "H=" + String(avgData.humidity, 1) + " %, ";
   out += "P=" + String(avgData.pressure / 100, 1) + " hPa, ";
@@ -26,14 +32,15 @@ void printAvg() { // debugging function
   Serial.println(out);
 }
 
-// takes one sample every 1000 ms
-void updateRollingAvg() {
-  if (!sampleDue) {
-    return;
+float rowAverage(int row) { // returns avg of row in matrix
+  float sum = 0;
+  for (int col = 0; col < AVG_SAMPLES; col++) {
+    sum += dataMatrix[row][col];
   }
-  //Serial.println("updateRollingAvg called");
-  sampleDue = false;
+  return sum / AVG_SAMPLES;
+}
 
+void rollingAvg() {
   // non-blocking read of BH1750
   if (lightSensor.measurementReady()) {
     float lux = lightSensor.readLightLevel();
@@ -57,35 +64,40 @@ void updateRollingAvg() {
     bme.beginReading();
   }
 
-  // add the newest values to the running totals
-  sumData.temperature += latestData.temperature;
-  sumData.humidity += latestData.humidity;
-  sumData.pressure += latestData.pressure;
-  sumData.gas_resistance += latestData.gas_resistance;
-  sumData.light += latestData.light;
-  sampleCount++;
+  // newest values
+  float newest[NUM_VARS];
+  newest[ROW_TEMP] = latestData.temperature;
+  newest[ROW_HUMIDITY] = latestData.humidity;
+  newest[ROW_PRESSURE] = latestData.pressure;
+  newest[ROW_GAS] = latestData.gas_resistance;
+  newest[ROW_LIGHT] = latestData.light;
 
-  // build block to be 5 samples
+  // shift every row left by one, newest value goes in the rightmost column
+  for (int row = 0; row < NUM_VARS; row++) {
+    for (int col = 0; col < AVG_SAMPLES - 1; col++) {
+      dataMatrix[row][col] = dataMatrix[row][col + 1];
+    }
+    dataMatrix[row][AVG_SAMPLES - 1] = newest[row];
+  }
+
+  // wait until the matrix is full before averaging
   if (sampleCount < AVG_SAMPLES) {
+    sampleCount++;
     return;
   }
 
-  // divide the totals to get the averages
-  avgData.temperature = sumData.temperature / AVG_SAMPLES;
-  avgData.humidity = sumData.humidity / AVG_SAMPLES;
-  avgData.pressure = sumData.pressure / AVG_SAMPLES;
-  avgData.gas_resistance = sumData.gas_resistance / AVG_SAMPLES;
-  avgData.light = sumData.light / AVG_SAMPLES;
+  // average each row
+  avgData.temperature = rowAverage(ROW_TEMP);
+  avgData.humidity = rowAverage(ROW_HUMIDITY);
+  avgData.pressure = rowAverage(ROW_PRESSURE);
+  avgData.gas_resistance = rowAverage(ROW_GAS);
+  avgData.light = rowAverage(ROW_LIGHT);
   avgReady = true;
-  sampleCount = 0;
-  memset(&sumData, 0, sizeof(sumData));
 
   printAvg();
 }
 
-// boolean to trigger updateRollingAvg()
-void rollingAvg() {
-  sampleDue = true;
-  Serial.println("rollingAvg called");
-  updateRollingAvg();
+void setupRollingAvgInterrupt() {
+  Timer1.attachInterrupt(rollingAvg);
+  Timer1.start(SAMPLE_INT);
 }
