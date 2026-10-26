@@ -72,9 +72,8 @@ void setup() {
   
   readSensors(&latestData);
   
-  //attach ISR for rolling avg
-  Timer1.attachInterrupt(rollingAvg);
-  Timer1.start(1000000); // 1000ms = 1Hz
+  //set up interrupt for rolling avg
+  setupRollingAvgInterrupt();
   
   // set up interrupt for logging
   setupInterruptLogging();
@@ -108,10 +107,9 @@ void handle_input()
 void loop() {
   handle_input();
 
-  updateRollingAvg();
   if (!avgReady)
   {
-    return;
+    rollingAvg();
   }
 
   runInterruptLogging();
