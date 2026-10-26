@@ -5,6 +5,7 @@
 
 #include <DueTimer.h>
 
+#define SAMPLE_INT     500000 // MICROseconds. Decrease with CAUTION! comment out printAvg(); [L97] below 100ms
 #define AVG_SAMPLES      5
 #define NUM_VARS         5
 
@@ -98,5 +99,5 @@ void rollingAvg() {
 
 void setupRollingAvgInterrupt() {
   Timer1.attachInterrupt(rollingAvg);
-  Timer1.start(500000); // 500ms
+  Timer1.start(SAMPLE_INT);
 }

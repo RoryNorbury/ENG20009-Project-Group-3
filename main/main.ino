@@ -60,6 +60,7 @@ void setup() {
   }
   
   start_SDcard();
+  // Clear_SD(file); //uncomment to clear SD
   Read_SD(file);
   
   delay(1000);
