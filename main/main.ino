@@ -28,6 +28,7 @@ bool isLog = false;
 #include "rtc.h"
 #include "timerInterrupts.h"
 #include "interrupt_logging.h"
+#include "SDI_12_indicator.h"
 
 // variable declarations here
 int ledAlertPin = 11;
@@ -42,7 +43,10 @@ void setup() {
 
   pinMode(ledAlertPin, OUTPUT);
   digitalWrite(ledAlertPin, HIGH);
-
+  
+  // setup SDI-12 transaction indicator LED
+  setupIndicatorPin();
+  
   if (initSensors())
   {
     Serial.println("Could not initialise sensors, exiting");
@@ -54,9 +58,9 @@ void setup() {
     Serial.println("Could not initialise rtc, exiting");
     exit(1);
   }
-
+  
   start_SDcard();
-
+  
   delay(1000);
   Serial.println("Compliant sensor node");
 
@@ -64,30 +68,39 @@ void setup() {
   tft.initR(INITR_BLACKTAB);
   tft.setRotation(3);
   tft.fillScreen(ST77XX_BLACK);
-
+  
   readSensors(&latestData);
   
   //attach ISR for rolling avg
   Timer1.attachInterrupt(rollingAvg);
   Timer1.start(100000); // 100ms = 10Hz
-
+  
   // set up interrupt for logging
   setupInterruptLogging();
+
+  // set up interrupt for SDI-12 transaction indicator
+  setupIndicatorInterrupt();
 }
 
 void handle_input()
 {
   if (Serial1.available() > 0)
   {
+    // enable SD-12 indicator blinking while input is being handled
+    startIndicatorBlink();
+    
     String str = Serial1.readString(); // reads string from Serial Monitor
     str = str.substring(1); //removes weird square/junk character
     str.trim(); //removes trailing whitespace
     Serial.println(str);
-
+    
     String ret = interpret_command(str);
 
     Serial.println(ret);
     sendToSDA(ret, DIRO);
+
+    // stop SDI-12 indicator
+    stopIndicatorBlink();
   }
 }
 
