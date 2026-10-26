@@ -127,13 +127,13 @@ void loop() {
   }
   else
   {
-    float values[2][4];
+    float avgValues[2][4];
     if (wasAlerted){
       tft.fillScreen(ST77XX_BLACK);
       wasAlerted = false;
     }
-    avgData.fillArray(values);
-    updateLCD(values);
+    avgData.fillArray(avgValues);
+    updateLCD(avgValues);
     digitalWrite(ledAlertPin, LOW);
   }
 }

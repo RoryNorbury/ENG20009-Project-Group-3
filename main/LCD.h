@@ -19,7 +19,7 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RS
 int lastLCDDraw = 0;
 int LCDDrawPeriod = 6000;
 
-void updateLCD(float data[2][4])
+void updateLCD(float avgData[2][4])
 {
   if (millis() > lastLCDDraw + LCDDrawPeriod)
   {
@@ -31,23 +31,23 @@ void updateLCD(float data[2][4])
     //clear screen, then display: temp, humidity, pressure, and gas resistance on LCD
     tft.setCursor(0, 0);
     tft.print("Temperature: ");
-    tft.print(data[0][0], 1); // rounded to 1dp
+    tft.print(avgData[0][0], 1); // rounded to 1dp
     tft.println(" C  ");
 
     tft.print("Humidity:    ");
-    tft.print(data[0][1], 1); // rounded to 1 dp
+    tft.print(avgData[0][1], 1); // rounded to 1 dp
     tft.println(" %  ");
     
     tft.print("Pressure:    ");
-    tft.print(round((data[0][2])/100)); // converted to HPa (standard unit)
+    tft.print(round((avgData[0][2])/100)); // converted to HPa (standard unit)
     tft.println(" HPa  ");
     
     tft.print("Gas Resis:   ");
-    tft.print(round((data[0][3])/1000)); // converted to KOhms
+    tft.print(round((avgData[0][3])/1000)); // converted to KOhms
     tft.println(" kOhms  ");
     
     tft.print("Light Level: ");
-    tft.print(round(data[1][0]));
+    tft.print(round(avgData[1][0]));
     tft.println(" Lux  ");
 
     tft.println("");
