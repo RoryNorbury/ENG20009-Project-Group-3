@@ -6,7 +6,7 @@
 
 #define BLINK_INTERVAL 100000 // microseconds
 
-int indicatorPin = 6;
+int indicatorPin = 4;
 
 volatile bool indicatorBlink = false;
 
@@ -37,5 +37,5 @@ void setupIndicatorPin()
 void setupIndicatorInterrupt()
 {
     Timer5.attachInterrupt(indicatorISR);
-    Timer5.setFrequency(BLINK_INTERVAL);
+    Timer5.setPeriod(BLINK_INTERVAL);
 }

@@ -16,11 +16,6 @@ sensorData avgData;
 int sampleCount = 0;
 bool avgReady = false;
 
-// boolean to trigger updateRollingAvg()
-void rollingAvg() {
-  sampleDue = true;
-}
-
 void printAvg() { // debugging function
   String out = "Avg: ";
   out += "T=" + String(avgData.temperature, 1) + " C, ";
@@ -31,11 +26,12 @@ void printAvg() { // debugging function
   Serial.println(out);
 }
 
-// takes one sample every 100 ms
+// takes one sample every 1000 ms
 void updateRollingAvg() {
   if (!sampleDue) {
     return;
   }
+  //Serial.println("updateRollingAvg called");
   sampleDue = false;
 
   // non-blocking read of BH1750
@@ -85,4 +81,11 @@ void updateRollingAvg() {
   memset(&sumData, 0, sizeof(sumData));
 
   printAvg();
+}
+
+// boolean to trigger updateRollingAvg()
+void rollingAvg() {
+  sampleDue = true;
+  Serial.println("rollingAvg called");
+  updateRollingAvg();
 }

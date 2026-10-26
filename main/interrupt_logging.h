@@ -13,6 +13,9 @@ void executeSDCardLogging() {
   extern sensorData avgData;
   String time = rtc::getTimeString(true);
   logSensordata(avgData, time);
+  Serial.println("executeSDCardLogging");
+  isLog = true;
+  //Read_SD(file);
 }
 
 void runInterruptLogging() {
@@ -24,6 +27,7 @@ void runInterruptLogging() {
 
 void vTimerLoggingISR() {
   interruptLoggingFlag = true;
+  // Serial.println("vTimerLoggingISR");
 }
 
 void setupInterruptLogging() {

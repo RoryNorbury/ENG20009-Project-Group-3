@@ -23,6 +23,8 @@ void updateLCD(float avgData[2][4])
 {
   if (millis() > lastLCDDraw + LCDDrawPeriod)
   {
+    Serial.print(millis());
+    Serial.println(" - LCD started");
     lastLCDDraw = millis();
 
     tft.setTextColor(ST77XX_WHITE,  ST77XX_BLACK);
@@ -60,6 +62,8 @@ void updateLCD(float avgData[2][4])
     else{
       tft.println("INACTIVE   ");
     }
+    Serial.print(millis());
+    Serial.println(" - LCD finished");
   }
 }
 

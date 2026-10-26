@@ -31,7 +31,7 @@ bool isLog = false;
 #include "SDI_12_indicator.h"
 
 // variable declarations here
-int ledAlertPin = 7;
+int ledAlertPin = 5;
 int DIRO = 8;
 
 void setup() {
@@ -42,7 +42,7 @@ void setup() {
   digitalWrite(DIRO, HIGH); //HIGH = READ. LOW = WRITE
 
   pinMode(ledAlertPin, OUTPUT);
-  digitalWrite(ledAlertPin, HIGH);
+  digitalWrite(ledAlertPin, LOW);
   
   // setup SDI-12 transaction indicator LED
   setupIndicatorPin();
@@ -60,6 +60,7 @@ void setup() {
   }
   
   start_SDcard();
+  Read_SD(file);
   
   delay(1000);
   Serial.println("Compliant sensor node");
@@ -73,7 +74,7 @@ void setup() {
   
   //attach ISR for rolling avg
   Timer1.attachInterrupt(rollingAvg);
-  Timer1.start(100000); // 100ms = 10Hz
+  Timer1.start(1000000); // 1000ms = 1Hz
   
   // set up interrupt for logging
   setupInterruptLogging();
@@ -122,8 +123,8 @@ void loop() {
       tft.fillScreen(ST77XX_BLACK);
       wasAlerted = true;
     }
-    displayAlert(alerts);
     digitalWrite(ledAlertPin, HIGH);
+    displayAlert(alerts);
   }
   else
   {
@@ -133,7 +134,7 @@ void loop() {
       wasAlerted = false;
     }
     avgData.fillArray(avgValues);
-    updateLCD(avgValues);
     digitalWrite(ledAlertPin, LOW);
+    updateLCD(avgValues);
   }
 }
