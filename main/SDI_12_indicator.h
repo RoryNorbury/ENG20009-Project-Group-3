@@ -4,7 +4,7 @@
 
 #include <DueTimer.h>
 
-#define BLINK_FREQUENCY 10 // Hz
+#define BLINK_INTERVAL 100000 // microseconds
 
 int indicatorPin = 10;
 
@@ -37,5 +37,5 @@ void setupIndicatorPin()
 void setupIndicatorInterrupt()
 {
     Timer5.attachInterrupt(indicatorISR);
-    Timer5.setFrequency(BLINK_FREQUENCY);
+    Timer5.setFrequency(BLINK_INTERVAL);
 }
