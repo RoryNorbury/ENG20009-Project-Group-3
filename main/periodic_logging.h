@@ -12,21 +12,23 @@ namespace periodic_logging
     int lastLogTime = 0;
 }
 
-void logSensordata()
-{
-    sensorData data;
-    readSensors(&data);
-    String time = rtc::getTimeString(true);
-    logSensordata(data, time);
-    Serial.println("Writing to sd card: [" + time + "]," + String(data.temperature) + "," + String(data.humidity) + "," + String(data.pressure) + "," + String(data.gas_resistance) + "," + String(data.light));
-    isLog = true;
-}
+// Dont think we need this
+// void logSensordata()
+// {
+//     sensorData data;
+//     readSensors(&data);
+//     String time = rtc::getTimeString(true);
+//     logSensordata(data, time);
+//     Serial.println("Writing to sd card: [" + time + "]," + String(data.temperature) + "," + String(data.humidity) + "," + String(data.pressure) + "," + String(data.gas_resistance) + "," + String(data.light));
+//     isLog = true;
+// }
 
 void update_periodic_logging()
 {
     if (millis() > periodic_logging::lastLogTime + periodic_logging::logPeriod)
     {
         periodic_logging::lastLogTime = millis();
-        logSensordata();
+        executeSDCardLogging();
+        // logSensordata();
     }
 }

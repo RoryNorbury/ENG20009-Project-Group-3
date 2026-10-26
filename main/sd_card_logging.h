@@ -58,9 +58,7 @@ void logSensordata(sensorData data, String time){
   log += String(data.gas_resistance) + ",";
   log += String(data.light);
   Write_SD(file, log);
-
 }
-
 
 void Read_SD(File& file){
   file.open("LOG.CSV", O_RDWR);
@@ -68,6 +66,7 @@ void Read_SD(File& file){
   Serial.println(contents);
   file.close();
 }
+
 
 
 

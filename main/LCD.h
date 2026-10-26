@@ -6,6 +6,7 @@
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
 #include <SPI.h> // Hardware SPI library
 #include "threshold_alert.h"
+#include "button_navigation.h"
 
 //pins for LCD
 #define TFT_CS    10
@@ -26,7 +27,6 @@ void updateLCD(float avgData[2][4])
     Serial.print(millis());
     Serial.println(" - LCD started");
     lastLCDDraw = millis();
-
     tft.setTextColor(ST77XX_WHITE,  ST77XX_BLACK);
     tft.setTextSize(1);
     
@@ -97,5 +97,21 @@ void displayAlert(uint8_t alert_flag)
     {
       tft.println("Gas is above threshold!");
     }
+  }
+}
+
+void displaySystemInfo(){  
+  if (millis() > lastLCDDraw + LCDDrawPeriod)
+  {
+    lastLCDDraw = millis();
+    tft.setTextColor(ST77XX_WHITE,  ST77XX_BLACK);
+    tft.setTextSize(1);
+    tft.setCursor(0, 0);
+    tft.println("SYSTEM INFO");
+    tft.print("Logs: ");  
+    tft.println(getLogCount());
+    tft.print("Free: ");  
+    tft.print(getFreeStorage());  
+    tft.println(" KB");
   }
 }

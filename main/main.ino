@@ -18,6 +18,8 @@ float lastValues[2][4] = {
 };
 bool wasAlerted = false;
 bool isLog = false;
+bool liveDataScreen = true;
+bool screenChanged = false;
 
 #include "command_parser.h"
 #include "serial_monitor_input_for_testing.h"
@@ -81,6 +83,9 @@ void setup() {
 
   // set up interrupt for SDI-12 transaction indicator
   setupIndicatorInterrupt();
+
+  // set up interrupt for Navigation buttons
+  setupNavigationInterrupt();
 }
 
 void handle_input()
@@ -115,6 +120,12 @@ void loop() {
   }
 
   runInterruptLogging();
+
+  // Resets the screen if the screen mode changes
+  if (screenChanged){
+    tft.fillScreen(ST77XX_BLACK);
+    screenChanged = false;
+  }
   
   uint8_t alerts = check_alert_thresholds(avgData);
   if (alerts > 0)
@@ -133,8 +144,14 @@ void loop() {
       tft.fillScreen(ST77XX_BLACK);
       wasAlerted = false;
     }
-    avgData.fillArray(avgValues);
-    digitalWrite(ledAlertPin, LOW);
-    updateLCD(avgValues);
+    if (liveDataScreen){
+      displaySystemInfo();
+    }
+    else{
+      avgData.fillArray(avgValues);
+      digitalWrite(ledAlertPin, LOW);
+      updateLCD(avgValues);
+    }
+   
   }
 }
