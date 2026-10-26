@@ -6,7 +6,7 @@
 
 #define BLINK_INTERVAL 100000 // microseconds
 
-int indicatorPin = 10;
+int indicatorPin = 6;
 
 volatile bool indicatorBlink = false;
 

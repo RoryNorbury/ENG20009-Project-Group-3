@@ -31,7 +31,7 @@ bool isLog = false;
 #include "SDI_12_indicator.h"
 
 // variable declarations here
-int ledAlertPin = 11;
+int ledAlertPin = 7;
 int DIRO = 8;
 
 void setup() {
