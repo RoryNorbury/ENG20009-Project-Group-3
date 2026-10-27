@@ -25,7 +25,7 @@ String send_data(int dIndex) {
 
     Serial.print(out);
     Serial.print("\r\n");
-    return out; // returns the string
+    return out; // returns the data as a string
   } 
   else {
     Serial.print(sdiAddress);
