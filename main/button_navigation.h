@@ -17,31 +17,6 @@ const uint8_t  log_BUTTON_PIN    = 2;    // manual log button      (check the sc
 const uint8_t  toggle_BUTTON_PIN = 3;    // screen toggle button   (check the schematic)
 const uint32_t DEBOUNCE_MS       = 30;
 
-// defining all button components
-// struct Button {
-//   uint8_t  pin;
-//   bool     rawLast;
-//   bool     stable;
-//   uint32_t tChange;
-
-//   Button(uint8_t p) : pin(p), rawLast(false), stable(false), tChange(0) {} //define start states
-
-//   void begin() { pinMode(pin, INPUT_PULLUP); }      // LOW = pressed
-
-//   bool pressed() {                                  // true exactly once per press
-//     bool raw = (digitalRead(pin) == LOW);
-//     uint32_t now = millis();
-//     if (raw != rawLast) { rawLast = raw; tChange = now; }
-//     if ((now - tChange) >= DEBOUNCE_MS && raw != stable) {
-//       stable = raw;
-//       if (stable) return true;
-//     }
-//     return false;
-//   }
-// };
-
-// Button logBtn(log_BUTTON_PIN);
-// Button toggleBtn(toggle_BUTTON_PIN);
 
 int buttonLogTime;
 int buttonSwitchTime;
@@ -73,14 +48,6 @@ void setupNavigationInterrupt(){
   attachInterrupt(digitalPinToInterrupt(toggle_BUTTON_PIN), switchScreen, RISING); // attaches button 2 to switch screens funciton
 }
 
-// printing on the LCD screen
-// void drawLiveScreen() { //printing everything on the same line so it is all one line
-//   lcd.print("Temperature: "); lcd.print(latest.temperature, 1);    lcd.println(" C");
-//   lcd.print("Humidity: ");    lcd.print(latest.humidity, 1);       lcd.println(" %");
-//   lcd.print("Pressure: ");    lcd.print(latest.pressure, 1);       lcd.println(" hPa");
-//   lcd.print("Gas: ");         lcd.print(latest.gas_resistance, 1); lcd.println();
-//   lcd.print("Lux: ");         lcd.print(latest.lux, 0);            lcd.println(" lx");
-// }
 
 String getLogCount(){
   String logcount = String(int(getLineCount(file)));
@@ -122,3 +89,27 @@ String getFreeStorage(){
 //     else                              drawSystemInfo();
 //   }
 // }
+
+
+// defining all button components
+// struct Button {
+//   uint8_t  pin;
+//   bool     rawLast;
+//   bool     stable;
+//   uint32_t tChange;
+
+//   Button(uint8_t p) : pin(p), rawLast(false), stable(false), tChange(0) {} //define start states
+
+//   void begin() { pinMode(pin, INPUT_PULLUP); }      // LOW = pressed
+
+//   bool pressed() {                                  // true exactly once per press
+//     bool raw = (digitalRead(pin) == LOW);
+//     uint32_t now = millis();
+//     if (raw != rawLast) { rawLast = raw; tChange = now; }
+//     if ((now - tChange) >= DEBOUNCE_MS && raw != stable) {
+//       stable = raw;
+//       if (stable) return true;
+//     }
+//     return false;
+//   }
+// };
