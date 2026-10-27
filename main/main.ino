@@ -101,10 +101,8 @@ void handle_input()
     Serial.println(str);
     
     String ret = interpret_command(str);
-    if(ret != ""){
-      Serial.println(ret);
-      sendToSDA(ret, DIRO);
-    }
+    Serial.println(ret);
+     sendToSDA(ret, DIRO);
     // stop SDI-12 indicator
     stopIndicatorBlink();
   }
