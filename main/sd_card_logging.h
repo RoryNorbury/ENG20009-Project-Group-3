@@ -13,7 +13,6 @@ FsFile file;
 
 // number of free bytes in sd card
 uint64_t freeBytes = 0;
-uint32_t logCount = 0;
 
 // Chip select
 const int SD_CS_PIN = A3;
@@ -27,6 +26,7 @@ const int SOFT_SCK_PIN = 13;
 SoftSpiDriver<SOFT_MISO_PIN, SOFT_MOSI_PIN, SOFT_SCK_PIN> softSpi;
 
 #define SD_CONFIG SdSpiConfig(SD_CS_PIN, SHARED_SPI, SD_SCK_MHZ(0), &softSpi)
+
 
 void updateFreeBytes()
 {
@@ -59,7 +59,11 @@ void start_SDcard(){
     while (1);
   }
   
-  Clear_SD(file);
+  if (!file.open("LOG.CSV", O_RDWR)) {
+    Clear_SD(file);
+    Serial.println("Open");
+  }
+  
   updateFreeBytes();
 }
 
@@ -78,7 +82,6 @@ void logSensordata(sensorData data, String time){
   log += String(data.gas_resistance) + ",";
   log += String(data.light);
   Write_SD(file, log);
-  logCount++;
 }
 
 void Read_SD(File& file){
@@ -93,7 +96,17 @@ uint64_t getFreeBytes()
   return freeBytes;
 }
 
-int getLineCount()
+int getLineCount(File& file)
 {
-  return logCount;
+  file.open("LOG.CSV", O_READ);
+  
+  int count = 0;
+  char buffer[50];
+  
+  while (file.fgets(buffer, sizeof(buffer)) > 0)
+  {
+    count++;
+  }
+  file.close();
+  return count;
 }
