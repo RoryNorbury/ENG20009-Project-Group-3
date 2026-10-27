@@ -47,25 +47,24 @@ void Clear_SD(File& file){
   file.open("LOG.CSV", O_RDWR | O_CREAT);
   file.println("TimeStamp,temperature,humidity,pressure,gasresistance,light");
   file.close();
-  updateFreeBytes();
 }
 
 void start_SDcard(){
-
+  
   if (!sd.begin(SD_CONFIG)) {
     Serial.println("SD card initialization failed!");
     sd.initErrorHalt();
     while (1);
   }
-
+  
   Clear_SD(file);
+  updateFreeBytes();
 }
 
 void Write_SD(File& file, String contents){
   file.open("LOG.CSV", O_RDWR | O_AT_END);
   file.println(contents);
   file.close();
-  updateFreeBytes();
 }
 
 void logSensordata(sensorData data, String time){
