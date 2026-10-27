@@ -11,6 +11,7 @@
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
 #include <Arduino.h>
 #include "interrupt_logging.h"
+#include "sd_card_logging.h"
 
 const uint8_t  log_BUTTON_PIN    = 2;    // manual log button      (check the schematic)
 const uint8_t  toggle_BUTTON_PIN = 3;    // screen toggle button   (check the schematic)
@@ -96,12 +97,13 @@ void setupNavigationInterrupt(){
 // }
 
 String getLogCount(){
-  String logcount = "";
+  String logcount = String(int(getLineCount(file)));
   return String(logcount);
 }
 
 String getFreeStorage(){
-  String cachedFreeKB = "";
+
+  String cachedFreeKB = String(int(getFreeBytes()));
   return String(cachedFreeKB);
 }
 

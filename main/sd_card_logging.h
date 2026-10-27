@@ -70,6 +70,27 @@ void Read_SD(File& file){
   file.close();
 }
 
+uint64_t getFreeBytes()
+{
+  // get number of free clusters
+  uint32_t freeClusters = sd.vol()->freeClusterCount();
+  // get number of blocks per cluster
+  uint32_t blocksPerCluster = sd.vol()->sectorsPerCluster();
+  // calculate free space in bytes (1 block = 512 bytes)
+  uint64_t freeBytes = (uint64_t)freeClusters * blocksPerCluster * 512;
+  return freeBytes;
+}
 
+int getLineCount(File& file)
+{
+  file.open("LOG.CSV", O_READ);
 
+  int count = 0;
+  char buffer[50];
 
+  while (file.fgets(buffer, sizeof(buffer)) > 0)
+  {
+    count++;
+  }
+  return count;
+}
