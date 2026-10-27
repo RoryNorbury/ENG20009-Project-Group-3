@@ -42,28 +42,12 @@ void updateFreeBytes()
   }
 }
 
-void updateLogCount(File& file)
-{
-  file.open("LOG.CSV", O_READ);
-
-  int count = 0;
-  char buffer[50];
-
-  while (file.fgets(buffer, sizeof(buffer)) > 0)
-  {
-    count++;
-  }
-  file.close();
-  logCount = count;
-}
-
 void Clear_SD(File& file){
   sd.remove("LOG.CSV");
   file.open("LOG.CSV", O_RDWR | O_CREAT);
   file.println("TimeStamp,temperature,humidity,pressure,gasresistance,light");
   file.close();
   updateFreeBytes();
-  updateLogCount(file);
 }
 
 void start_SDcard(){
@@ -74,10 +58,7 @@ void start_SDcard(){
     while (1);
   }
 
-  if (!file.open("LOG.CSV", O_RDWR)) {
-    Clear_SD(file);
-    Serial.println("Open");
-  }
+  Clear_SD(file);
 }
 
 void Write_SD(File& file, String contents){
@@ -85,7 +66,6 @@ void Write_SD(File& file, String contents){
   file.println(contents);
   file.close();
   updateFreeBytes();
-  updateLogCount(file);
 }
 
 void logSensordata(sensorData data, String time){
@@ -97,6 +77,7 @@ void logSensordata(sensorData data, String time){
   log += String(data.gas_resistance) + ",";
   log += String(data.light);
   Write_SD(file, log);
+  logCount++
 }
 
 void Read_SD(File& file){
