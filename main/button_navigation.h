@@ -95,7 +95,7 @@ void setupNavigationInterrupt(){
 // }
 
 String getLogCount(){
-  String logcount = String(int(getLineCount()));
+  String logcount = String(int(getLineCount(file)));
   return String(logcount);
 }
 
