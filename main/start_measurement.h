@@ -18,12 +18,5 @@ String start_measurement()
   // possibly translates to <CR><CR><LF> on Windows, need to check
   out += "\r\n";
 
-  // retrieve data
-  sensorData data;
-  if (!readSensors(&data))
-  {
-    data.fillArray(lastValues);
-  }
-
   return out;
 }

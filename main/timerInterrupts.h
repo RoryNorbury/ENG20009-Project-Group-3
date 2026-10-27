@@ -94,6 +94,8 @@ void rollingAvg() {
   avgData.light = rowAverage(ROW_LIGHT);
   avgReady = true;
 
+  avgData.fillArray(lastValues);
+
   printAvg();
 }
 
