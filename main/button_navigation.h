@@ -61,6 +61,9 @@ String getFreeStorage(){
   return String(cachedFreeKB);
 }
 
+//////////////////////////////////////////////////////////////
+// Old code
+
 // void drawSystemInfo() {
 //   lcd.println("SYSTEM INFO");
 //   lcd.print("Logs: ");  lcd.println(logCount);
