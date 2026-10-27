@@ -97,13 +97,13 @@ void setupNavigationInterrupt(){
 // }
 
 String getLogCount(){
-  String logcount = String(int(getLineCount(file)));
+  String logcount = String(int(getLineCount(file) / 1000));
   return String(logcount);
 }
 
 String getFreeStorage(){
 
-  String cachedFreeKB = String(int(getFreeBytes()));
+  String cachedFreeKB = String(int(getFreeBytes() / 1000));
   return String(cachedFreeKB);
 }
 
