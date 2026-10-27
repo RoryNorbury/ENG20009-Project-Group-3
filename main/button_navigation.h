@@ -46,43 +46,31 @@ const uint32_t DEBOUNCE_MS       = 30;
 int buttonLogTime;
 int buttonSwitchTime;
 
-// ---------- 3. Navigation state ----------
-enum Screen { SCREEN_LIVE, SCREEN_SYSINFO };
-Screen   currentScreen = SCREEN_LIVE;
-bool     redrawNeeded  = true;     // set this to true whenever new sensor values arrive
-
-// Print &lcd = Serial;               // TODO: replace with your real display object
-
-uint32_t freeStorageKB() { return 0; }   // TODO: free space on the SD card, in KB
-
 
 //Button 1 action
 void manualLog() {
-  if(buttonLogTime + 50 < millis()){
+  if(buttonLogTime + 50 < millis()){ // debouncing
     buttonLogTime = millis();
-    executeSDCardLogging();
+    executeSDCardLogging(); // calls the logging function logs are handled there
   }
-  // TODO: call your real logger here, e.g.
-  //   saveLog(now, latest.temperature, latest.humidity, latest.pressure, latest.lux);
-  // Serial.println("manual log");
-  // logCount++;                      // only count it if the SD write succeeded
-  // redrawNeeded = true;
+
 }
+// Button 2 action
 void switchScreen(){
-  if(buttonSwitchTime + 50 < millis()){
+  if(buttonSwitchTime + 50 < millis()){ // debouncing
     buttonSwitchTime = millis();
-    liveDataScreen = !liveDataScreen;
-    screenChanged = true;
+    liveDataScreen = !liveDataScreen; // toggles screen mode
+    screenChanged = true; // tells the lcd screen to refresh
     
   }
 }
 
+// setup button interupts
 void setupNavigationInterrupt(){
-  // setup button interupts
-  pinMode(log_BUTTON_PIN, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(log_BUTTON_PIN), manualLog, RISING);
-  pinMode(toggle_BUTTON_PIN, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(toggle_BUTTON_PIN), switchScreen, RISING);
+  pinMode(log_BUTTON_PIN, INPUT_PULLUP); // enables button 1
+  attachInterrupt(digitalPinToInterrupt(log_BUTTON_PIN), manualLog, RISING); // attaches button 1 to manual log function
+  pinMode(toggle_BUTTON_PIN, INPUT_PULLUP); // enables button 2
+  attachInterrupt(digitalPinToInterrupt(toggle_BUTTON_PIN), switchScreen, RISING); // attaches button 2 to switch screens funciton
 }
 
 // printing on the LCD screen
@@ -99,9 +87,10 @@ String getLogCount(){
   return String(logcount);
 }
 
+// gets the remaining free storage of the sdcard
 String getFreeStorage(){
 
-  String cachedFreeKB = String(int(getFreeBytes() / 1000));
+  String cachedFreeKB = String(int(getFreeBytes() / 1000)); // gets the value in bytes and converts to kb
   return String(cachedFreeKB);
 }
 
