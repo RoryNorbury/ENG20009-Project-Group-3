@@ -1,3 +1,6 @@
+// Author: NOAH MUNRO | 105912100
+// File for sd card reading, writing and logging
+
 #pragma once
 
 //sd card libraray
