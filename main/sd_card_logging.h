@@ -36,7 +36,10 @@ void updateFreeBytes()
   uint32_t blocksPerCluster = sd.vol()->sectorsPerCluster();
   // calculate free space in bytes (1 block = 512 bytes)
   uint64_t free = (uint64_t)freeClusters * blocksPerCluster * 512;
-  freeBytes = free;
+  if (free < 16000000000)
+  {
+    freeBytes = free;
+  }
 }
 
 void updateLogCount(File& file)
