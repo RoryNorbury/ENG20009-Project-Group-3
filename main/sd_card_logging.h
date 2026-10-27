@@ -77,7 +77,7 @@ void logSensordata(sensorData data, String time){
   log += String(data.gas_resistance) + ",";
   log += String(data.light);
   Write_SD(file, log);
-  logCount++
+  logCount++;
 }
 
 void Read_SD(File& file){
