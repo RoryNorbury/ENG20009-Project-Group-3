@@ -30,6 +30,7 @@ SoftSpiDriver<SOFT_MISO_PIN, SOFT_MOSI_PIN, SOFT_SCK_PIN> softSpi;
 
 void updateFreeBytes()
 {
+  Serial.println("Calculating free space, please be patient...");
   // get number of free clusters
   uint32_t freeClusters = sd.vol()->freeClusterCount();
   // get number of blocks per cluster
@@ -40,6 +41,7 @@ void updateFreeBytes()
   {
     freeBytes = free;
   }
+  Serial.println("Finished calculating free space");
 }
 
 void Clear_SD(File& file){
