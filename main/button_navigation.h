@@ -50,8 +50,6 @@ int buttonSwitchTime;
 enum Screen { SCREEN_LIVE, SCREEN_SYSINFO };
 Screen   currentScreen = SCREEN_LIVE;
 bool     redrawNeeded  = true;     // set this to true whenever new sensor values arrive
-uint32_t logCount      = 0;
-uint32_t cachedFreeKB  = 0;
 
 // Print &lcd = Serial;               // TODO: replace with your real display object
 
@@ -97,7 +95,7 @@ void setupNavigationInterrupt(){
 // }
 
 String getLogCount(){
-  String logcount = String(int(getLineCount(file) / 1000));
+  String logcount = String(int(getLineCount() / 1000));
   return String(logcount);
 }
 

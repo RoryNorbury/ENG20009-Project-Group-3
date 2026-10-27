@@ -11,6 +11,10 @@
 SdFs sd;
 FsFile file;
 
+// number of free bytes in sd card
+uint64_t freeBytes = 0;
+uint32_t logCount = 0;
+
 // Chip select
 const int SD_CS_PIN = A3;
 
@@ -24,11 +28,39 @@ SoftSpiDriver<SOFT_MISO_PIN, SOFT_MOSI_PIN, SOFT_SCK_PIN> softSpi;
 
 #define SD_CONFIG SdSpiConfig(SD_CS_PIN, SHARED_SPI, SD_SCK_MHZ(0), &softSpi)
 
+void updateFreeBytes()
+{
+  // get number of free clusters
+  uint32_t freeClusters = sd.vol()->freeClusterCount();
+  // get number of blocks per cluster
+  uint32_t blocksPerCluster = sd.vol()->sectorsPerCluster();
+  // calculate free space in bytes (1 block = 512 bytes)
+  uint64_t free = (uint64_t)freeClusters * blocksPerCluster * 512;
+  freeBytes = free;
+}
+
+void updateLogCount(File& file)
+{
+  file.open("LOG.CSV", O_READ);
+
+  int count = 0;
+  char buffer[50];
+
+  while (file.fgets(buffer, sizeof(buffer)) > 0)
+  {
+    count++;
+  }
+  file.close();
+  logCount = count;
+}
+
 void Clear_SD(File& file){
   sd.remove("LOG.CSV");
   file.open("LOG.CSV", O_RDWR | O_CREAT);
   file.println("TimeStamp,temperature,humidity,pressure,gasresistance,light");
   file.close();
+  updateFreeBytes();
+  updateLogCount(file);
 }
 
 void start_SDcard(){
@@ -49,8 +81,9 @@ void Write_SD(File& file, String contents){
   file.open("LOG.CSV", O_RDWR | O_AT_END);
   file.println(contents);
   file.close();
+  updateFreeBytes();
+  updateLogCount(file);
 }
-
 
 void logSensordata(sensorData data, String time){
   String log = "";
@@ -72,25 +105,10 @@ void Read_SD(File& file){
 
 uint64_t getFreeBytes()
 {
-  // get number of free clusters
-  uint32_t freeClusters = sd.vol()->freeClusterCount();
-  // get number of blocks per cluster
-  uint32_t blocksPerCluster = sd.vol()->sectorsPerCluster();
-  // calculate free space in bytes (1 block = 512 bytes)
-  uint64_t freeBytes = (uint64_t)freeClusters * blocksPerCluster * 512;
   return freeBytes;
 }
 
-int getLineCount(File& file)
+int getLineCount()
 {
-  file.open("LOG.CSV", O_READ);
-
-  int count = 0;
-  char buffer[50];
-
-  while (file.fgets(buffer, sizeof(buffer)) > 0)
-  {
-    count++;
-  }
-  return count;
+  return logCount;
 }
