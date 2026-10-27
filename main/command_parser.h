@@ -30,12 +30,12 @@ enum Command_List {
 String interpret_command(String Command){
   // checks if the command ends with "!"
   if (!(Command.endsWith("!"))){
-    return "0 - Invalid Command Missing \"!\"";
+    return "";
   }
   // Checks if there is whitespace in the command
   for (int i = 0; i < Command.length(); i++){
     if (int(Command[i]) == 32){
-      return "0 - Invalid Command";
+      return "";
     }
   }
   // Address Query Condition
@@ -47,12 +47,12 @@ String interpret_command(String Command){
   int command_value = Command[2] - 48; // Gets Command Value from Command String
   // Checks if the Command Address is within range
   if (command_address != sdiAddress) {
-    return "0 - Invalid Address";
+    return "";
   }
   // checks if the Command Value is within range if applicable 
   if (Command.length() == 4){
     if ((command_value < 0) || (command_value > 9)){
-      return "0 - Invalid Command";
+      return "";
     }
   }
   // switch case for the rest of the commands 
