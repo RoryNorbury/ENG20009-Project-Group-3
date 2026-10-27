@@ -82,6 +82,6 @@ String interpret_command(String Command){
       return send_identification(command_address);
       break;
     default:
-      return "0 - Invalid Command";
+      return "";
   }
 }
