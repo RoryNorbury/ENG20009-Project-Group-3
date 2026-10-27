@@ -40,8 +40,7 @@ String interpret_command(String Command){
   }
   // Address Query Condition
   if ((Command[0] == ADDRESS_QUERY_L) && (Command.length() == 2)) {
-    // Address Query Function goes here ----------------------------------
-    // Example:
+    // Address Query Function 
     return address_query();
   }
   int command_address = Command[0] - 48; // Gets Address from Command String
@@ -59,31 +58,27 @@ String interpret_command(String Command){
   // switch case for the rest of the commands 
   switch (int(Command[1])){
     case CHANGE_ADDRESS_L:
-      // Change Address Function goes here --------------------------------
-      // Example:
+      // Change Address Function 
       Serial.print("Change Address ");
       Serial.print(" To: ");
       Serial.println(command_value);
       return change_address(command_value);
       break;
     case START_MEASUREMENT_L:
-      // Start Measurement Function goes here ------------------------------
-      // Example:
+      // Start Measurement Function 
       Serial.print("Start Measurement");
       Serial.println(command_address);
       return start_measurement();
       break;
     case SEND_DATA_L:
-      // Send Data Function goes here -------------------------------
-      // Example:
+      // Send Data Function 
       Serial.print("Send Data ");
       Serial.print(" Data Selected: ");
       Serial.println(command_value);
       return send_data(command_value);
       break;
     case SEND_ID_L:
-      // Send Identification Function goes here --------------------------
-      // Example:
+      // Send Identification Function 
       return send_identification(command_address);
       break;
     default:
