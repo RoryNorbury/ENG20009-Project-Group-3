@@ -1,4 +1,3 @@
-#include "api/Common.h"
 // Button navigation task (ENG20009 Credit)
 // Button 1: force an immediate manual log entry to the SD card.
 // Button 2: toggle between the live data screen and the "System Info" screen
